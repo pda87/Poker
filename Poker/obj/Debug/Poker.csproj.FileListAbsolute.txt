@@ -59,4 +59,3 @@ C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\obj\Debug\
 C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\obj\Debug\Poker.csproj.GenerateResource.Cache
 C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\obj\Debug\Poker.exe
 C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\obj\Debug\Poker.pdb
-C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\obj\Debug\Poker.csprojResolveAssemblyReference.cache

@@ -14,35 +14,52 @@ namespace Poker
         public List<Card> Flop { get; set; }
         public Player Player1 { get; set; }
         public Player Player2 { get; set; }
+        public Player Player3 { get; set; }
+        public Player Player4 { get; set; }
 
         public Game()
         {
             this.GameDeck = new List<Card>();
             this.Flop = new List<Card>();
+            
             this.Player1 = new Player();
             this.Player1.Name = "Player 1";
             this.Player2 = new Player();
             this.Player2.Name = "Player 2";
+            this.Player3 = new Player();
+            this.Player3.Name = "Player 3";
+            this.Player4 = new Player();
+            this.Player4.Name = "Player 4";
+
             this.DeckCount = 51;
         }
 
-        public void PlayGame(List<PictureBox> flopPictureBoxes, Label player1ResultLabel, Label player2ResultLabel, List<PictureBox> player1PictureBoxes,
-            List<PictureBox> player2PictureBoxes, Label gameResultLabel)
+        public void PlayGame(List<PictureBox> flopPictureBoxes, Label player1ResultLabel, Label player2ResultLabel, Label player3ResultLabel, 
+            Label player4ResultLabel, List<PictureBox> player1PictureBoxes,List<PictureBox> player2PictureBoxes, 
+            List<PictureBox> player3PictureBoxes, List<PictureBox> player4PictureBoxes, Label gameResultLabel)
         {
             this.GameDeck = GenerateGameDeck.CreateDeck();
             this.GenerateFlop();
             this.DisplayFlop(flopPictureBoxes);
             this.GenerateRandomHand(this.Player1);
             this.GenerateRandomHand(this.Player2);
+            this.GenerateRandomHand(this.Player3);
+            this.GenerateRandomHand(this.Player4);
 
             this.BuildHandCombinations(this.Player1);
             this.BuildHandCombinations(this.Player2);
+            this.BuildHandCombinations(this.Player3);
+            this.BuildHandCombinations(this.Player4);
 
             this.CheckHandCombinations(this.Player1);
             this.CheckHandCombinations(this.Player2);
+            this.CheckHandCombinations(this.Player3);
+            this.CheckHandCombinations(this.Player4);
 
             this.DisplayPlayerResults(this.Player1.OutputString, this.Player1, player1ResultLabel, player1PictureBoxes);
             this.DisplayPlayerResults(this.Player2.OutputString, this.Player2, player2ResultLabel, player2PictureBoxes);
+            this.DisplayPlayerResults(this.Player3.OutputString, this.Player3, player3ResultLabel, player3PictureBoxes);
+            this.DisplayPlayerResults(this.Player4.OutputString, this.Player4, player4ResultLabel, player4PictureBoxes);
             this.DisplayGameResults(gameResultLabel);
         }
 
@@ -87,83 +104,56 @@ namespace Poker
                 this.GameDeck.RemoveAt(randomCard);
                 this.DeckCount--;
             }
-
-            //foreach (Card card in this.Flop)
-            //{
-            //    player.Hand.HandCardList.Add(card);
-            //}
-
-            //player.Hand.SortedHand = player.Hand.HandCardList.OrderBy(o => o.CardValue).ToList<Card>();
-
         }
 
         private void BuildHandCombinations(Player player)
         {
-            List<Card> playerFirstHandCombination = new List<Card>();
-            List<Card> playerSecondHandCombination = new List<Card>();
-            List<Card> playerThirdHandCombination = new List<Card>();
+            flopCombinations(player, 0, 1, 2);
+            flopCombinations(player, 0, 1, 3);
+            flopCombinations(player, 0, 1, 4);
 
-            foreach (Card card in player.Hand.HandCardList)
-            {
-                playerFirstHandCombination.Add(card);
-                playerSecondHandCombination.Add(card);
-                playerThirdHandCombination.Add(card);
-            }
+            flopCombinations(player, 0, 2, 3);
+            flopCombinations(player, 0, 2, 4);
 
-            playerFirstHandCombination.Add(this.Flop[0]);
-            playerFirstHandCombination.Add(this.Flop[1]);
-            playerFirstHandCombination.Add(this.Flop[2]);
+            flopCombinations(player, 1, 2, 3);
+            flopCombinations(player, 1, 2, 4);
 
-            List<Card> firstCombinationSorted = playerFirstHandCombination.OrderBy(o => o.CardValue).ToList<Card>();
+            flopCombinations(player, 2, 3, 4);
+        }
+
+        public void flopCombinations(Player player, int firstFlopCard, int secondFlopCard, int thirdFlopCard)
+        {
+            List<Card> handBuilder = new List<Card>();
+
+            handBuilder.Add(player.Hand.HandCardList[0]);
+            handBuilder.Add(player.Hand.HandCardList[1]);
+
+            handBuilder.Add(this.Flop[firstFlopCard]);
+            handBuilder.Add(this.Flop[secondFlopCard]);
+            handBuilder.Add(this.Flop[thirdFlopCard]);
 
             player.HandCombinations.Add(new Hand()
             {
-                SortedHand = firstCombinationSorted,
+                SortedHand = handBuilder.OrderBy(o => o.CardValue).ToList<Card>(),
                 CardValue1 = player.Hand.CardValue1,
                 CardValue2 = player.Hand.CardValue2,
                 OutputString = player.OutputString
             });
 
-            playerSecondHandCombination.Add(this.Flop[1]);
-            playerSecondHandCombination.Add(this.Flop[2]);
-            playerSecondHandCombination.Add(this.Flop[3]);
 
-            List<Card> secondCombinationSorted = playerSecondHandCombination.OrderBy(o => o.CardValue).ToList<Card>();
-
-            player.HandCombinations.Add(new Hand()
-            {
-                SortedHand = secondCombinationSorted,
-                CardValue1 = player.Hand.CardValue1,
-                CardValue2 = player.Hand.CardValue2,
-                OutputString = player.OutputString
-            });
-
-            playerThirdHandCombination.Add(this.Flop[2]);
-            playerThirdHandCombination.Add(this.Flop[3]);
-            playerThirdHandCombination.Add(this.Flop[4]);
-
-            List<Card> thirdCombinationSorted = playerThirdHandCombination.OrderBy(o => o.CardValue).ToList<Card>();
-
-            player.HandCombinations.Add(new Hand()
-            {
-                SortedHand = thirdCombinationSorted,
-                CardValue1 = player.Hand.CardValue1,
-                CardValue2 = player.Hand.CardValue2,
-                OutputString = player.OutputString
-            });
         }
 
         private void CheckHandCombinations(Player player)
         {
-            List<HandResult> handResultChecks = new List<HandResult>();
+            //List<HandResult> handResultChecks = new List<HandResult>();
 
             foreach (Hand hand in player.HandCombinations)
             {
                 this.CheckSortedHand(hand);
-                handResultChecks.Add(hand.HandResult);
+                //handResultChecks.Add(hand.HandResult);
             }
 
-            var maxHand = player.HandCombinations.OrderBy(o => o.HandResult);
+            var maxHand = player.HandCombinations.OrderByDescending(o => o.HandResult);
 
             foreach (var item in maxHand)
             {
@@ -232,7 +222,7 @@ namespace Poker
                 //YOU HAVE TWO PAIRS
                 hand.HandResult = HandResult.TwoPairs;
                 firstValue = ": a pair of " + hand.CardValue1.ToString() + "s";
-                secondValue = "and pair of " + hand.CardValue2.ToString() + "s";
+                secondValue = "and a pair of " + hand.CardValue2.ToString() + "s";
             }
 
               //PAIR
@@ -254,7 +244,10 @@ namespace Poker
 
             hand.OutputString += hand.HandResult.ToString() + firstValue + " " + secondValue;
 
-            ///player.Hand.OutputString += player.Hand.HandResult.ToString();
+            if (hand.OutputString.Contains("Sixs"))
+            {
+                hand.OutputString = hand.OutputString.Replace("Sixs", "Sixes");
+            }
 
         }
 
@@ -273,82 +266,104 @@ namespace Poker
 
         private void DisplayGameResults(Label gameResultLabel)
         {
-            if (this.Player1.Hand.HandResult > this.Player2.Hand.HandResult)
+
+            List<Player> playerList = new List<Player>();
+            playerList.Add(new Player() { Name = this.Player1.Name, Hand = this.Player1.Hand });
+            playerList.Add(new Player() { Name = this.Player2.Name, Hand = this.Player2.Hand });
+            playerList.Add(new Player() { Name = this.Player3.Name, Hand = this.Player3.Hand });
+            playerList.Add(new Player() { Name = this.Player4.Name, Hand = this.Player4.Hand });
+
+            List<Player> playersSortedByHand = playerList.OrderByDescending(player => player.Hand.HandResult).ToList<Player>();
+
+            HandResult winningHand = playersSortedByHand[0].Hand.HandResult;
+
+            List<Player> winningPlayers = (from player in playersSortedByHand
+                         where player.Hand.HandResult.Equals(winningHand)
+                         select player).ToList<Player>();
+
+            List<Player> winningHands = winningPlayers.OrderByDescending(hand => hand.Hand.CardValue1).ToList();
+
+            if (winningHands.Count == 1)
             {
-                gameResultLabel.Text = "PLAYER 1 WINS!";
-                gameResultLabel.Refresh();
-                this.Player1.Hand.Outcome = Outcome.Won;
-                this.Player2.Hand.Outcome = Outcome.Lost;
+                gameResultLabel.Text = winningHands[0].Name.ToUpper() + " is the winner!".ToUpper();
             }
 
-            else if (this.Player2.Hand.HandResult > this.Player1.Hand.HandResult)
+            else if (winningHands.Count == 2)
             {
-                gameResultLabel.Text = "PLAYER 2 WINS!";
-                gameResultLabel.Refresh();
-                this.Player2.Hand.Outcome = Outcome.Won;
-                this.Player1.Hand.Outcome = Outcome.Lost;
-            }
-
-            else if (this.Player1.Hand.HandResult == this.Player2.Hand.HandResult)
-            {
-                if (this.Player1.Hand.CardValue1 > this.Player2.Hand.CardValue1)
+                if (winningHands[0].Hand.CardValue1 > winningHands[1].Hand.CardValue1)
                 {
-                    gameResultLabel.Text = "PLAYER 1 WINS!";
-                    gameResultLabel.Refresh();
-                    this.Player1.Hand.Outcome = Outcome.Won;
-                    this.Player2.Hand.Outcome = Outcome.Lost;
+                    gameResultLabel.Text = winningHands[0].Name.ToUpper() + " is the winner!".ToUpper();
                 }
 
-                else if (this.Player2.Hand.CardValue1 > this.Player1.Hand.CardValue1)
+                else if (winningHands[1].Hand.CardValue1 > winningHands[0].Hand.CardValue1)
                 {
-                    gameResultLabel.Text = "PLAYER 2 WINS!";
-                    gameResultLabel.Refresh();
-                    this.Player2.Hand.Outcome = Outcome.Won;
-                    this.Player1.Hand.Outcome = Outcome.Lost;
+                    gameResultLabel.Text = winningHands[1].Name.ToUpper() + " is the winner!".ToUpper();
                 }
 
-                else
+                else if (winningHands[0].Hand.CardValue1 == winningHands[1].Hand.CardValue1)
                 {
-                    gameResultLabel.Text = "DRAW...";
-                    gameResultLabel.Refresh();
 
-                    List<Card> player1InitialSorted = new List<Card>() { this.Player1.Hand.HandCardList[0], this.Player1.Hand.HandCardList[1] };
-                    List<Card> player2InitialSorted = new List<Card>() { this.Player2.Hand.HandCardList[0], this.Player2.Hand.HandCardList[1] };
-
-                    if (player1InitialSorted.Max(o => o.CardValue) > player2InitialSorted.Max(o => o.CardValue))
+                    if (winningHands[0].Hand.CardValue2 > winningHands[1].Hand.CardValue2)
                     {
-                        gameResultLabel.Text = "PLAYER 1 WINS!";
-                        gameResultLabel.Refresh();
-                        this.Player1.Hand.Outcome = Outcome.Won;
-                        this.Player2.Hand.Outcome = Outcome.Lost;
+                        gameResultLabel.Text = winningHands[0].Name.ToUpper() + " is the winner!".ToUpper();
                     }
 
-                    else if (player2InitialSorted.Max(o => o.CardValue) > player1InitialSorted.Max(o => o.CardValue))
+                    else if (winningHands[1].Hand.CardValue2 > winningHands[0].Hand.CardValue2)
                     {
-                        gameResultLabel.Text = "PLAYER 2 WINS!";
-                        gameResultLabel.Refresh();
-                        this.Player2.Hand.Outcome = Outcome.Won;
-                        this.Player1.Hand.Outcome = Outcome.Lost;
+                        gameResultLabel.Text = winningHands[1].Name.ToUpper() + " is the winner!".ToUpper();
+                    }
+
+                    else if (winningHands[0].Hand.HandCardList.Max(o => o.CardValue) > winningHands[1].Hand.HandCardList.Max(o => o.CardValue))
+                    {
+                        gameResultLabel.Text = winningHands[0].Name.ToUpper() + " is the winner!".ToUpper();
+                    }
+
+                    else if (winningHands[1].Hand.HandCardList.Max(o => o.CardValue) > winningHands[0].Hand.HandCardList.Max(o => o.CardValue))
+                    {
+                        gameResultLabel.Text = winningHands[1].Name.ToUpper() + " is the winner!".ToUpper();
+                    }
+
+                    else if (winningHands[0].Hand.HandCardList.Min(o => o.CardValue) > winningHands[1].Hand.HandCardList.Min(o => o.CardValue))
+                    {
+                        gameResultLabel.Text = winningHands[0].Name.ToUpper() + " is the winner!".ToUpper();
+                    }
+
+                    else if (winningHands[1].Hand.HandCardList.Min(o => o.CardValue) > winningHands[0].Hand.HandCardList.Min(o => o.CardValue))
+                    {
+                        gameResultLabel.Text = winningHands[1].Name.ToUpper() + " is the winner!".ToUpper();
                     }
 
                     else
                     {
-                        gameResultLabel.Text = "DRAW...";
-                        gameResultLabel.Refresh();
+                        gameResultLabel.Text = "DRAW: " + winningHands[0].Name + "/" + winningHands[1].Name;
                     }
 
                 }
+
+                else
+                {
+                    gameResultLabel.Text = "UNHANDLED CASE";
+                }
+            }
+
+            else if (winningHands.Count == 3)
+            {
+                var winningPlayer = winningHands.OrderByDescending(player => player.Hand.HandCardList.Max(o => o.CardValue)).ToList();
+                gameResultLabel.Text = winningPlayer[0].Name.ToUpper() + " is the winner!".ToUpper();
+            }
+
+            else if (winningHands.Count == 4)
+            {
+                var winningPlayer = winningHands.OrderByDescending(player => player.Hand.HandCardList.Max(o => o.CardValue)).ToList();
+                gameResultLabel.Text = winningPlayer[0].Name.ToUpper() + " is the winner!".ToUpper();
             }
 
             else
             {
-                gameResultLabel.Text = "UNHANDLED CASE...";
-                gameResultLabel.Refresh();
-
+                gameResultLabel.Text = "UNHANDLED CASE";
             }
         }
 
-        //SEPARATE INTO A CLASS?
         #region individualhandchecks
 
         private bool checkStraightFlushCase(Hand hand)

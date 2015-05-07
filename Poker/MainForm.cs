@@ -19,9 +19,13 @@ namespace Poker
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            gameResultLabel.Text = "";
+
             List<PictureBox> pictureBoxes = new List<PictureBox>() { player1Card1, player1Card2,
                                                                     flopCard1, flopCard2, flopCard3, flopCard4, flopCard5,
-                                                                    player2Card1, player2Card2 };
+                                                                    player2Card1, player2Card2,
+                                                                    player3Card1, player3Card2,
+                                                                    player4Card1, player4Card2};
 
             foreach (PictureBox card in pictureBoxes)
             {
@@ -34,18 +38,17 @@ namespace Poker
         {
             List<PictureBox> player1PictureBoxes = new List<PictureBox>() { player1Card1, player1Card2 };
             List<PictureBox> player2PictureBoxes = new List<PictureBox>() { player2Card1, player2Card2 };
+            List<PictureBox> player3PictureBoxes = new List<PictureBox>() { player3Card1, player3Card2 };
+            List<PictureBox> player4PictureBoxes = new List<PictureBox>() { player4Card1, player4Card2 };
             List<PictureBox> flopPictureBoxes = new List<PictureBox>() { flopCard1, flopCard2, flopCard3, flopCard4, flopCard5 };
 
             Game game = new Game();
 
-            game.PlayGame(flopPictureBoxes, player1ResultLabel, player2ResultLabel, player1PictureBoxes, player2PictureBoxes, gameResultLabel);
+            game.PlayGame(flopPictureBoxes, player1ResultLabel, player2ResultLabel, player3ResultLabel, player4ResultLabel,
+                player1PictureBoxes, player2PictureBoxes, player3PictureBoxes, player4PictureBoxes, gameResultLabel);
 
             //THIS GREYS THE BUTTON OUT AFTER CLICKING!
             //button1.Enabled = false;
         }
-
-   
-
-
     }
 }

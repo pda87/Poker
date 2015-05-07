@@ -36,5 +36,4 @@ namespace Poker
         King,
         Ace
     }
-
 }

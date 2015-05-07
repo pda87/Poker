@@ -8,7 +8,6 @@ namespace Poker
 {
     public class Card
     {
-        //public int Value { get; set; }
         public CardValue CardValue { get; set; }
         public string Name { get; set; }
         public string Image { get; set; }

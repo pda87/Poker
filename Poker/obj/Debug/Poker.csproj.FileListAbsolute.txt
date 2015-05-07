@@ -38,6 +38,7 @@ C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\bin\Debug\
 C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\bin\Debug\CardImages\AD.png
 C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\bin\Debug\CardImages\AH.png
 C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\bin\Debug\CardImages\AS.png
+C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\bin\Debug\CardImages\CardBacks\blue.png
 C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\bin\Debug\CardImages\JC.png
 C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\bin\Debug\CardImages\JD.png
 C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\bin\Debug\CardImages\JH.png
@@ -58,5 +59,4 @@ C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\obj\Debug\
 C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\obj\Debug\Poker.csproj.GenerateResource.Cache
 C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\obj\Debug\Poker.exe
 C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\obj\Debug\Poker.pdb
-C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\bin\Debug\CardImages\CardBacks\blue.png
-C:\Users\petedarden\Documents\Visual Studio 2013\Projects\Poker\Poker\obj\Debug\Poker.csprojResolveAssemblyReference.cache
+C:\Users\petedarden\documents\visual studio 2013\Projects\Poker\Poker\obj\Debug\Poker.csprojResolveAssemblyReference.cache

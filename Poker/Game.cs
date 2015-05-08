@@ -16,12 +16,14 @@ namespace Poker
         public Player Player2 { get; set; }
         public Player Player3 { get; set; }
         public Player Player4 { get; set; }
+        public List<Player> PlayerList { get; set; }
+        public int Pot { get; set; }
 
         public Game()
         {
             this.GameDeck = new List<Card>();
             this.Flop = new List<Card>();
-            
+
             this.Player1 = new Player();
             this.Player1.Name = "Player 1";
             this.Player2 = new Player();
@@ -31,20 +33,45 @@ namespace Poker
             this.Player4 = new Player();
             this.Player4.Name = "Player 4";
 
+            this.PlayerList = new List<Player>()
+            {
+                this.Player1,
+                this.Player2,
+                this.Player3,
+                this.Player4
+            };
+
             this.DeckCount = 51;
         }
 
-        public void PlayGame(List<PictureBox> flopPictureBoxes, Label player1ResultLabel, Label player2ResultLabel, Label player3ResultLabel, 
-            Label player4ResultLabel, List<PictureBox> player1PictureBoxes,List<PictureBox> player2PictureBoxes, 
-            List<PictureBox> player3PictureBoxes, List<PictureBox> player4PictureBoxes, Label gameResultLabel)
+        public void PlayGame(List<PictureBox> flopPictureBoxes, Label player1ResultLabel, Label player2ResultLabel, Label player3ResultLabel,
+            Label player4ResultLabel, Label player1BankBalance, Label player2BankBalance, Label player3BankBalance, Label player4BankBalance,
+            List<PictureBox> player1PictureBoxes, List<PictureBox> player2PictureBoxes, List<PictureBox> player3PictureBoxes,
+            List<PictureBox> player4PictureBoxes, Label gameResultLabel, Label potLabel)
         {
+            this.ClearGameVariables();
             this.GameDeck = GenerateGameDeck.CreateDeck();
+            this.DeckCount = this.GameDeck.Count();
             this.GenerateFlop();
             this.DisplayFlop(flopPictureBoxes);
             this.GenerateRandomHand(this.Player1);
             this.GenerateRandomHand(this.Player2);
             this.GenerateRandomHand(this.Player3);
             this.GenerateRandomHand(this.Player4);
+
+            //this.Player1.Bet = 5;
+            this.Player2.Bet = 5;
+            this.Player3.Bet = 5;
+            this.Player4.Bet = 5;
+
+            foreach (Player player in this.PlayerList)
+            {
+                player.BankBalance -= player.Bet;
+            }
+
+            this.Pot = this.Player1.Bet + this.Player2.Bet + this.Player3.Bet + this.Player4.Bet;
+
+            potLabel.Text = String.Format("{0:C}", this.Pot);
 
             this.BuildHandCombinations(this.Player1);
             this.BuildHandCombinations(this.Player2);
@@ -56,11 +83,77 @@ namespace Poker
             this.CheckHandCombinations(this.Player3);
             this.CheckHandCombinations(this.Player4);
 
-            this.DisplayPlayerResults(this.Player1.OutputString, this.Player1, player1ResultLabel, player1PictureBoxes);
-            this.DisplayPlayerResults(this.Player2.OutputString, this.Player2, player2ResultLabel, player2PictureBoxes);
-            this.DisplayPlayerResults(this.Player3.OutputString, this.Player3, player3ResultLabel, player3PictureBoxes);
-            this.DisplayPlayerResults(this.Player4.OutputString, this.Player4, player4ResultLabel, player4PictureBoxes);
+            this.DisplayPlayerResults(this.Player1.OutputString, this.Player1, player1ResultLabel, player1BankBalance, player1PictureBoxes);
+            this.DisplayPlayerResults(this.Player2.OutputString, this.Player2, player2ResultLabel, player2BankBalance, player2PictureBoxes);
+            this.DisplayPlayerResults(this.Player3.OutputString, this.Player3, player3ResultLabel, player3BankBalance, player3PictureBoxes);
+            this.DisplayPlayerResults(this.Player4.OutputString, this.Player4, player4ResultLabel, player4BankBalance, player4PictureBoxes);
             this.DisplayGameResults(gameResultLabel);
+            //this.Payout(gameResultLabel);
+        }
+
+        public void Payout(Label gameResultLabel)
+        {
+            //List<Player> winningPlayers = this.PlayerList.OrderByDescending(player => player.WinOrLose.Equals(Player.Outcome.Win)).ToList();
+
+            var winningPlayers = (from player in this.PlayerList
+                                  where player.WinOrLose.Equals(Player.Outcome.Win)
+                                  select player).ToList();
+
+            if (winningPlayers.Count == 1)
+            {
+                winningPlayers[0].BankBalance += this.Pot;
+            }
+
+            else if (winningPlayers.Count == 2)
+            {
+                var splitPot = this.Pot % 2;
+
+                if (splitPot != 0)
+                {
+                    this.Pot--;
+                }
+
+                winningPlayers[0].BankBalance += this.Pot / 2;
+                winningPlayers[1].BankBalance += this.Pot / 2;
+            }
+
+            else if (winningPlayers.Count == 3)
+            {
+                //ToDo
+            }
+
+            else if (winningPlayers.Count == 4)
+            {
+                //ToDo
+            }
+
+            else
+            {
+                //gameResultLabel.Text = "UNHANDLED CASE";
+            }
+
+
+
+        }
+
+        private void ClearGameVariables()
+        {
+            foreach (Player player in this.PlayerList)
+            {
+                player.OutputString = "";
+                player.Hand.CardValue1 = 0;
+                player.Hand.CardValue2 = 0;
+                player.Hand.HandCardList.Clear();
+                player.Hand.SortedHand.Clear();
+                player.Hand.OutputString = "";
+                player.Hand.HandResult = HandResult.HighCard;
+                player.HandCombinations.Clear();
+                player.WinOrLose = Player.Outcome.Lose;
+            }
+
+            this.Pot = 0;
+            this.Flop.Clear();
+            this.GameDeck.Clear();
         }
 
         public void GenerateFlop()
@@ -118,6 +211,8 @@ namespace Poker
             flopCombinations(player, 1, 2, 3);
             flopCombinations(player, 1, 2, 4);
 
+            flopCombinations(player, 1, 3, 4);
+
             flopCombinations(player, 2, 3, 4);
         }
 
@@ -168,6 +263,7 @@ namespace Poker
 
         public void CheckSortedHand(Hand hand)
         {
+            hand.OutputString = "";
             string firstValue = "";
             string secondValue = "";
 
@@ -251,7 +347,7 @@ namespace Poker
 
         }
 
-        private void DisplayPlayerResults(string outputString, Player player, Label playerResultLabel, List<PictureBox> playerPictureBoxes)
+        private void DisplayPlayerResults(string outputString, Player player, Label playerResultLabel, Label playerBankBalance, List<PictureBox> playerPictureBoxes)
         {
             playerResultLabel.Text = "";
 
@@ -262,29 +358,27 @@ namespace Poker
                 playerPictureBoxes[i].ImageLocation = player.Hand.HandCardList[i].Image;
                 playerPictureBoxes[i].SizeMode = PictureBoxSizeMode.AutoSize;
             }
+
+            playerBankBalance.Text = "Player Balance: " + String.Format("{0:C}", player.BankBalance);
         }
 
+        //THIS HAS THE player.Outcome = Outcome.Win/player.Outcome = Outcome.Lose SECTIONS IN IT
         private void DisplayGameResults(Label gameResultLabel)
         {
 
-            List<Player> playerList = new List<Player>();
-            playerList.Add(new Player() { Name = this.Player1.Name, Hand = this.Player1.Hand });
-            playerList.Add(new Player() { Name = this.Player2.Name, Hand = this.Player2.Hand });
-            playerList.Add(new Player() { Name = this.Player3.Name, Hand = this.Player3.Hand });
-            playerList.Add(new Player() { Name = this.Player4.Name, Hand = this.Player4.Hand });
-
-            List<Player> playersSortedByHand = playerList.OrderByDescending(player => player.Hand.HandResult).ToList<Player>();
+            List<Player> playersSortedByHand = this.PlayerList.OrderByDescending(player => player.Hand.HandResult).ToList<Player>();
 
             HandResult winningHand = playersSortedByHand[0].Hand.HandResult;
 
             List<Player> winningPlayers = (from player in playersSortedByHand
-                         where player.Hand.HandResult.Equals(winningHand)
-                         select player).ToList<Player>();
+                                           where player.Hand.HandResult.Equals(winningHand)
+                                           select player).ToList<Player>();
 
             List<Player> winningHands = winningPlayers.OrderByDescending(hand => hand.Hand.CardValue1).ToList();
 
             if (winningHands.Count == 1)
             {
+                winningHands[0].WinOrLose = Player.Outcome.Win;
                 gameResultLabel.Text = winningHands[0].Name.ToUpper() + " is the winner!".ToUpper();
             }
 
@@ -292,11 +386,13 @@ namespace Poker
             {
                 if (winningHands[0].Hand.CardValue1 > winningHands[1].Hand.CardValue1)
                 {
+                    winningHands[0].WinOrLose = Player.Outcome.Win;
                     gameResultLabel.Text = winningHands[0].Name.ToUpper() + " is the winner!".ToUpper();
                 }
 
                 else if (winningHands[1].Hand.CardValue1 > winningHands[0].Hand.CardValue1)
                 {
+                    winningHands[1].WinOrLose = Player.Outcome.Win;
                     gameResultLabel.Text = winningHands[1].Name.ToUpper() + " is the winner!".ToUpper();
                 }
 
@@ -305,36 +401,44 @@ namespace Poker
 
                     if (winningHands[0].Hand.CardValue2 > winningHands[1].Hand.CardValue2)
                     {
+                        winningHands[0].WinOrLose = Player.Outcome.Win;
                         gameResultLabel.Text = winningHands[0].Name.ToUpper() + " is the winner!".ToUpper();
                     }
 
                     else if (winningHands[1].Hand.CardValue2 > winningHands[0].Hand.CardValue2)
                     {
+                        winningHands[1].WinOrLose = Player.Outcome.Win;
                         gameResultLabel.Text = winningHands[1].Name.ToUpper() + " is the winner!".ToUpper();
                     }
 
                     else if (winningHands[0].Hand.HandCardList.Max(o => o.CardValue) > winningHands[1].Hand.HandCardList.Max(o => o.CardValue))
                     {
+                        winningHands[0].WinOrLose = Player.Outcome.Win;
                         gameResultLabel.Text = winningHands[0].Name.ToUpper() + " is the winner!".ToUpper();
                     }
 
                     else if (winningHands[1].Hand.HandCardList.Max(o => o.CardValue) > winningHands[0].Hand.HandCardList.Max(o => o.CardValue))
                     {
+                        winningHands[1].WinOrLose = Player.Outcome.Win;
                         gameResultLabel.Text = winningHands[1].Name.ToUpper() + " is the winner!".ToUpper();
                     }
 
                     else if (winningHands[0].Hand.HandCardList.Min(o => o.CardValue) > winningHands[1].Hand.HandCardList.Min(o => o.CardValue))
                     {
+                        winningHands[0].WinOrLose = Player.Outcome.Win;
                         gameResultLabel.Text = winningHands[0].Name.ToUpper() + " is the winner!".ToUpper();
                     }
 
                     else if (winningHands[1].Hand.HandCardList.Min(o => o.CardValue) > winningHands[0].Hand.HandCardList.Min(o => o.CardValue))
                     {
+                        winningHands[1].WinOrLose = Player.Outcome.Win;
                         gameResultLabel.Text = winningHands[1].Name.ToUpper() + " is the winner!".ToUpper();
                     }
 
                     else
                     {
+                        winningHands[0].WinOrLose = Player.Outcome.Win;
+                        winningHands[1].WinOrLose = Player.Outcome.Win;
                         gameResultLabel.Text = "DRAW: " + winningHands[0].Name + "/" + winningHands[1].Name;
                     }
 
@@ -349,12 +453,14 @@ namespace Poker
             else if (winningHands.Count == 3)
             {
                 var winningPlayer = winningHands.OrderByDescending(player => player.Hand.HandCardList.Max(o => o.CardValue)).ToList();
+                winningHands[0].WinOrLose = Player.Outcome.Win;
                 gameResultLabel.Text = winningPlayer[0].Name.ToUpper() + " is the winner!".ToUpper();
             }
 
             else if (winningHands.Count == 4)
             {
                 var winningPlayer = winningHands.OrderByDescending(player => player.Hand.HandCardList.Max(o => o.CardValue)).ToList();
+                winningHands[0].WinOrLose = Player.Outcome.Win;
                 gameResultLabel.Text = winningPlayer[0].Name.ToUpper() + " is the winner!".ToUpper();
             }
 

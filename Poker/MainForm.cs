@@ -22,15 +22,9 @@ namespace Poker
         private void Form1_Load(object sender, EventArgs e)
         {
             potLabel.Text = String.Format("{0:C}", 0);
-            playButton.Enabled = false;
+            player1StakeTextBox.Enabled = false;
+            player1Stake.Enabled = false;
             claimButton.Enabled = false;
-
-            gameResultLabel.Text = "Enter your stake...";
-            player1BankBalance.Text = "";
-            player2BankBalance.Text = "";
-            player3BankBalance.Text = "";
-            player4BankBalance.Text = "";
-
             displayCardBacks();
         }
 
@@ -59,12 +53,90 @@ namespace Poker
             List<PictureBox> player4PictureBoxes = new List<PictureBox>() { player4Card1, player4Card2 };
             List<PictureBox> flopPictureBoxes = new List<PictureBox>() { flopCard1, flopCard2, flopCard3, flopCard4, flopCard5 };
 
-            game.PlayGame(flopPictureBoxes, player1ResultLabel, player2ResultLabel, player3ResultLabel, player4ResultLabel,
+            if (game.FirstClick)
+            {
+                playButton.Enabled = false;
+                gameResultLabel.Text = "ENTER STAKE";
+                playButton.Enabled = false;
+                player1StakeTextBox.Enabled = true;
+                player1Stake.Enabled = true;
+
+                game.FirstClick = false;
+            }
+
+            else if (game.ResetGame)
+            {
+                game.Pot = 0;
+
+                game.PlayGame(flopPictureBoxes, player1ResultLabel, player2ResultLabel, player3ResultLabel, player4ResultLabel,
+                player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance,
+                player1PictureBoxes, player2PictureBoxes, player3PictureBoxes, player4PictureBoxes, gameResultLabel, potLabel);
+            }
+
+            else if (game.Flop.Count == 0)
+            {
+
+                game.PlayGame(flopPictureBoxes, player1ResultLabel, player2ResultLabel, player3ResultLabel, player4ResultLabel,
                 player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance,
                 player1PictureBoxes, player2PictureBoxes, player3PictureBoxes, player4PictureBoxes, gameResultLabel, potLabel);
 
-            playButton.Enabled = false;
-            player1Stake.Enabled = false;
+                playButton.Enabled = false;
+                gameResultLabel.Text = "ENTER STAKE";
+                playButton.Enabled = false;
+                player1StakeTextBox.Enabled = true;
+                player1Stake.Enabled = true;
+
+            }
+
+            else if (game.Flop.Count == 3)
+            {
+                game.PlayGame(flopPictureBoxes, player1ResultLabel, player2ResultLabel, player3ResultLabel, player4ResultLabel,
+                player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance,
+                player1PictureBoxes, player2PictureBoxes, player3PictureBoxes, player4PictureBoxes, gameResultLabel, potLabel);
+
+                playButton.Enabled = false;
+                gameResultLabel.Text = "ENTER STAKE";
+                playButton.Enabled = false;
+                player1StakeTextBox.Enabled = true;
+                player1Stake.Enabled = true;
+
+            }
+
+            else if (game.Flop.Count == 4)
+            {
+                game.PlayGame(flopPictureBoxes, player1ResultLabel, player2ResultLabel, player3ResultLabel, player4ResultLabel,
+                player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance,
+                player1PictureBoxes, player2PictureBoxes, player3PictureBoxes, player4PictureBoxes, gameResultLabel, potLabel);
+
+                playButton.Enabled = false;
+                gameResultLabel.Text = "ENTER STAKE";
+                playButton.Enabled = false;
+                player1StakeTextBox.Enabled = true;
+                player1Stake.Enabled = true;
+            }
+
+            else if (game.EndGame)
+            {
+                playButton.Enabled = false;
+                claimButton.Enabled = true;
+
+                game.PlayGame(flopPictureBoxes, player1ResultLabel, player2ResultLabel, player3ResultLabel, player4ResultLabel,
+                player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance,
+                player1PictureBoxes, player2PictureBoxes, player3PictureBoxes, player4PictureBoxes, gameResultLabel, potLabel);
+            }
+
+            else if (game.Flop.Count == 5)
+            {
+                game.PlayGame(flopPictureBoxes, player1ResultLabel, player2ResultLabel, player3ResultLabel, player4ResultLabel,
+                player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance,
+                player1PictureBoxes, player2PictureBoxes, player3PictureBoxes, player4PictureBoxes, gameResultLabel, potLabel);
+
+                playButton.Enabled = false;
+                gameResultLabel.Text = "ENTER STAKE";
+                playButton.Enabled = false;
+                player1StakeTextBox.Enabled = true;
+                player1Stake.Enabled = true;
+            }
         }
 
         private void player1Stake_Click(object sender, EventArgs e)
@@ -87,7 +159,6 @@ namespace Poker
                     gameResultLabel.Text = "Stake of " + String.Format("{0:C}", stake) + " received...";
                     playButton.Enabled = true;
                     player1Stake.Enabled = false;
-                    claimButton.Enabled = true;
                     player1StakeTextBox.Enabled = false;
                 }
 
@@ -125,13 +196,15 @@ namespace Poker
 
             displayCardBacks();
 
-            gameResultLabel.Text = "Enter your stake...";
+            gameResultLabel.Text = "";
+            game.ResetGame = false;
+            game.EndGame = false;
+            game.FirstClick = true;
+            game.Flop.Clear();
 
-            player1StakeTextBox.Enabled = true;
-            player1Stake.Enabled = true;
+            playButton.Enabled = true;
             claimButton.Enabled = false;
-            
         }
-        
+
     }
 }

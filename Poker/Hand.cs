@@ -14,7 +14,6 @@ namespace Poker
         public CardValue CardValue1 { get; set; }
         public CardValue CardValue2 { get; set; }
         public string OutputString { get; set; }
-        //public Outcome Outcome { get; set; }
 
         public Hand()
         {
@@ -36,11 +35,4 @@ namespace Poker
         FourOfAKind,
         StraightFlush
     }
-
-    //public enum Outcome
-    //{
-    //    Lost,
-    //    Won
-    //}
-
 }

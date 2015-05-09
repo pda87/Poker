@@ -9,6 +9,7 @@ namespace Poker
 {
     class Game
     {
+        public bool FirstClick { get; set; }
         public List<Card> GameDeck { get; set; }
         public int DeckCount { get; set; }
         public List<Card> Flop { get; set; }
@@ -18,9 +19,12 @@ namespace Poker
         public Player Player4 { get; set; }
         public List<Player> PlayerList { get; set; }
         public int Pot { get; set; }
+        public bool EndGame { get; set; }
+        public bool ResetGame { get; set; }
 
         public Game()
         {
+            this.FirstClick = true;
             this.GameDeck = new List<Card>();
             this.Flop = new List<Card>();
 
@@ -42,6 +46,8 @@ namespace Poker
             };
 
             this.DeckCount = 51;
+
+            this.EndGame = false;
         }
 
         public void PlayGame(List<PictureBox> flopPictureBoxes, Label player1ResultLabel, Label player2ResultLabel, Label player3ResultLabel,
@@ -49,52 +55,149 @@ namespace Poker
             List<PictureBox> player1PictureBoxes, List<PictureBox> player2PictureBoxes, List<PictureBox> player3PictureBoxes,
             List<PictureBox> player4PictureBoxes, Label gameResultLabel, Label potLabel)
         {
-            this.ClearGameVariables();
-            this.GameDeck = GenerateGameDeck.CreateDeck();
-            this.DeckCount = this.GameDeck.Count();
-            this.GenerateFlop();
-            this.DisplayFlop(flopPictureBoxes);
-            this.GenerateRandomHand(this.Player1);
-            this.GenerateRandomHand(this.Player2);
-            this.GenerateRandomHand(this.Player3);
-            this.GenerateRandomHand(this.Player4);
-
-            //this.Player1.Bet = 5;
-            this.Player2.Bet = 5;
-            this.Player3.Bet = 5;
-            this.Player4.Bet = 5;
-
-            foreach (Player player in this.PlayerList)
+            if (this.ResetGame)
             {
-                player.BankBalance -= player.Bet;
+                this.DisplayGameResults(gameResultLabel);
+
+                this.EndGame = false;
+                this.ResetGame = false;
+                this.Flop.Clear();
+                gameResultLabel.Text = "";
             }
 
-            this.Pot = this.Player1.Bet + this.Player2.Bet + this.Player3.Bet + this.Player4.Bet;
+            else if (this.EndGame)
+            {
+                this.DisplayPlayerResults(this.Player2.OutputString, this.Player2, player2ResultLabel, player2BankBalance, player2PictureBoxes);
+                this.DisplayPlayerResults(this.Player3.OutputString, this.Player3, player3ResultLabel, player3BankBalance, player3PictureBoxes);
+                this.DisplayPlayerResults(this.Player4.OutputString, this.Player4, player4ResultLabel, player4BankBalance, player4PictureBoxes);
+                this.DisplayGameResults(gameResultLabel);
+                this.ResetGame = true;
+            }
 
-            potLabel.Text = String.Format("{0:C}", this.Pot);
+            if (this.Flop.Count == 5)
+            {
+                this.EndGame = true;
+            }
 
-            this.BuildHandCombinations(this.Player1);
-            this.BuildHandCombinations(this.Player2);
-            this.BuildHandCombinations(this.Player3);
-            this.BuildHandCombinations(this.Player4);
+            else if (this.Flop.Count == 4)
+            {
+                this.GenerateFlop(1);
 
-            this.CheckHandCombinations(this.Player1);
-            this.CheckHandCombinations(this.Player2);
-            this.CheckHandCombinations(this.Player3);
-            this.CheckHandCombinations(this.Player4);
+                flopPictureBoxes[4].ImageLocation = this.Flop[4].Image;
+                flopPictureBoxes[4].SizeMode = PictureBoxSizeMode.AutoSize;
 
-            this.DisplayPlayerResults(this.Player1.OutputString, this.Player1, player1ResultLabel, player1BankBalance, player1PictureBoxes);
-            this.DisplayPlayerResults(this.Player2.OutputString, this.Player2, player2ResultLabel, player2BankBalance, player2PictureBoxes);
-            this.DisplayPlayerResults(this.Player3.OutputString, this.Player3, player3ResultLabel, player3BankBalance, player3PictureBoxes);
-            this.DisplayPlayerResults(this.Player4.OutputString, this.Player4, player4ResultLabel, player4BankBalance, player4PictureBoxes);
-            this.DisplayGameResults(gameResultLabel);
-            //this.Payout(gameResultLabel);
+                this.flopCombinations(this.Player1, 0, 1, 4);
+                this.flopCombinations(this.Player1, 1, 2, 4);
+                this.flopCombinations(this.Player1, 2, 3, 4);
+                this.flopCombinations(this.Player2, 0, 1, 4);
+                this.flopCombinations(this.Player2, 1, 2, 4);
+                this.flopCombinations(this.Player2, 2, 3, 4);
+                this.flopCombinations(this.Player3, 0, 1, 4);
+                this.flopCombinations(this.Player3, 1, 2, 4);
+                this.flopCombinations(this.Player3, 2, 3, 4);
+                this.flopCombinations(this.Player4, 0, 1, 4);
+                this.flopCombinations(this.Player4, 1, 2, 4);
+                this.flopCombinations(this.Player4, 2, 3, 4);
+
+                this.CheckHandCombinations(this.Player1);
+                this.CheckHandCombinations(this.Player2);
+                this.CheckHandCombinations(this.Player3);
+                this.CheckHandCombinations(this.Player4);
+
+                this.DisplayPlayerResults(this.Player1.OutputString, this.Player1, player1ResultLabel, player1BankBalance, player1PictureBoxes);
+                this.EndGame = true;
+
+            }
+
+            else if (this.Flop.Count == 3)
+            {
+                this.GenerateFlop(1);
+
+                flopPictureBoxes[3].ImageLocation = this.Flop[3].Image;
+                flopPictureBoxes[3].SizeMode = PictureBoxSizeMode.AutoSize;
+
+                this.flopCombinations(this.Player1, 0, 1, 3);
+                this.flopCombinations(this.Player1, 1, 2, 3);
+                this.flopCombinations(this.Player2, 0, 1, 3);
+                this.flopCombinations(this.Player2, 1, 2, 3);
+                this.flopCombinations(this.Player3, 0, 1, 3);
+                this.flopCombinations(this.Player3, 1, 2, 3);
+                this.flopCombinations(this.Player4, 0, 1, 3);
+                this.flopCombinations(this.Player4, 1, 2, 3);
+
+                this.CheckHandCombinations(this.Player1);
+                this.CheckHandCombinations(this.Player2);
+                this.CheckHandCombinations(this.Player3);
+                this.CheckHandCombinations(this.Player4);
+
+                this.DisplayPlayerResults(this.Player1.OutputString, this.Player1, player1ResultLabel, player1BankBalance, player1PictureBoxes);
+            }
+            
+            else if (this.Flop.Count == 0)
+            {
+                foreach (PictureBox pictureBox in player2PictureBoxes)
+                {
+                    pictureBox.ImageLocation = @"CardImages/CardBacks/blue.png";
+                    pictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+                }
+
+                foreach (PictureBox pictureBox in player3PictureBoxes)
+                {
+                    pictureBox.ImageLocation = @"CardImages/CardBacks/blue.png";
+                    pictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+                }
+
+                foreach (PictureBox pictureBox in player4PictureBoxes)
+                {
+                    pictureBox.ImageLocation = @"CardImages/CardBacks/blue.png";
+                    pictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+                }
+
+                foreach (PictureBox pictureBox in flopPictureBoxes)
+                {
+                    pictureBox.ImageLocation = @"CardImages/CardBacks/blue.png";
+                    pictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+                }
+
+                this.ClearGameVariables();
+                this.GameDeck = GenerateGameDeck.CreateDeck();
+                this.DeckCount = this.GameDeck.Count();
+                this.GenerateFlop(3);
+                this.DisplayFlop(flopPictureBoxes);
+                this.GenerateRandomHand(this.Player1);
+                this.GenerateRandomHand(this.Player2);
+                this.GenerateRandomHand(this.Player3);
+                this.GenerateRandomHand(this.Player4);
+
+                this.Player2.Bet = 5;
+                this.Player3.Bet = 5;
+                this.Player4.Bet = 5;
+
+                foreach (Player player in this.PlayerList)
+                {
+                    player.BankBalance -= player.Bet;
+                }
+
+                this.Pot = this.Player1.Bet + this.Player2.Bet + this.Player3.Bet + this.Player4.Bet;
+
+                potLabel.Text = String.Format("{0:C}", this.Pot);
+
+                this.flopCombinations(this.Player1, 0, 1, 2);
+                this.flopCombinations(this.Player2, 0, 1, 2);
+                this.flopCombinations(this.Player3, 0, 1, 2);
+                this.flopCombinations(this.Player4, 0, 1, 2);
+
+                this.CheckHandCombinations(this.Player1);
+                this.CheckHandCombinations(this.Player2);
+                this.CheckHandCombinations(this.Player3);
+                this.CheckHandCombinations(this.Player4);
+
+                this.DisplayPlayerResults(this.Player1.OutputString, this.Player1, player1ResultLabel, player1BankBalance, player1PictureBoxes);
+            }
         }
 
         public void Payout(Label gameResultLabel)
         {
-            //List<Player> winningPlayers = this.PlayerList.OrderByDescending(player => player.WinOrLose.Equals(Player.Outcome.Win)).ToList();
-
             var winningPlayers = (from player in this.PlayerList
                                   where player.WinOrLose.Equals(Player.Outcome.Win)
                                   select player).ToList();
@@ -156,11 +259,11 @@ namespace Poker
             this.GameDeck.Clear();
         }
 
-        public void GenerateFlop()
+        public void GenerateFlop(int flopSize)
         {
             Random random = new Random();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < flopSize; i++)
             {
                 int randomCard = random.Next(0, this.DeckCount - 1);
 
@@ -172,7 +275,7 @@ namespace Poker
 
         public void DisplayFlop(List<PictureBox> flopPictureBoxes)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 3; i++)
             {
                 flopPictureBoxes[i].ImageLocation = this.Flop[i].Image;
                 flopPictureBoxes[i].SizeMode = PictureBoxSizeMode.AutoSize;
@@ -197,23 +300,6 @@ namespace Poker
                 this.GameDeck.RemoveAt(randomCard);
                 this.DeckCount--;
             }
-        }
-
-        private void BuildHandCombinations(Player player)
-        {
-            flopCombinations(player, 0, 1, 2);
-            flopCombinations(player, 0, 1, 3);
-            flopCombinations(player, 0, 1, 4);
-
-            flopCombinations(player, 0, 2, 3);
-            flopCombinations(player, 0, 2, 4);
-
-            flopCombinations(player, 1, 2, 3);
-            flopCombinations(player, 1, 2, 4);
-
-            flopCombinations(player, 1, 3, 4);
-
-            flopCombinations(player, 2, 3, 4);
         }
 
         public void flopCombinations(Player player, int firstFlopCard, int secondFlopCard, int thirdFlopCard)

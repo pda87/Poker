@@ -44,7 +44,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.flopCard5 = new System.Windows.Forms.PictureBox();
             this.flopCard4 = new System.Windows.Forms.PictureBox();
-            this.flopLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.player2BankBalance = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -59,7 +58,6 @@
             this.player4Card2 = new System.Windows.Forms.PictureBox();
             this.player1Stake = new System.Windows.Forms.Button();
             this.player1StakeTextBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.potLabel = new System.Windows.Forms.Label();
             this.claimButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.player1Card1)).BeginInit();
@@ -95,10 +93,14 @@
             // player1ResultLabel
             // 
             this.player1ResultLabel.AutoSize = true;
+            this.player1ResultLabel.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.player1ResultLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.player1ResultLabel.Image = global::Poker.Properties.Resources.greenfelt;
             this.player1ResultLabel.Location = new System.Drawing.Point(20, 29);
             this.player1ResultLabel.Name = "player1ResultLabel";
-            this.player1ResultLabel.Size = new System.Drawing.Size(0, 13);
+            this.player1ResultLabel.Size = new System.Drawing.Size(129, 19);
             this.player1ResultLabel.TabIndex = 1;
+            this.player1ResultLabel.Text = "                              ";
             // 
             // player1Card1
             // 
@@ -135,15 +137,20 @@
             // player2ResultLabel
             // 
             this.player2ResultLabel.AutoSize = true;
+            this.player2ResultLabel.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.player2ResultLabel.Image = global::Poker.Properties.Resources.greenfelt;
             this.player2ResultLabel.Location = new System.Drawing.Point(20, 30);
             this.player2ResultLabel.Name = "player2ResultLabel";
-            this.player2ResultLabel.Size = new System.Drawing.Size(0, 13);
+            this.player2ResultLabel.Size = new System.Drawing.Size(125, 19);
             this.player2ResultLabel.TabIndex = 12;
+            this.player2ResultLabel.Text = "                             ";
             // 
             // gameResultLabel
             // 
             this.gameResultLabel.AutoSize = true;
             this.gameResultLabel.Font = new System.Drawing.Font("Arial", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gameResultLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.gameResultLabel.Image = global::Poker.Properties.Resources.greenfelt;
             this.gameResultLabel.Location = new System.Drawing.Point(23, 319);
             this.gameResultLabel.Name = "gameResultLabel";
             this.gameResultLabel.Size = new System.Drawing.Size(263, 32);
@@ -181,6 +188,8 @@
             this.groupBox1.Controls.Add(this.player1Card2);
             this.groupBox1.Controls.Add(this.player1Card1);
             this.groupBox1.Controls.Add(this.player1ResultLabel);
+            this.groupBox1.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.ForeColor = System.Drawing.SystemColors.Control;
             this.groupBox1.Location = new System.Drawing.Point(15, 35);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(484, 210);
@@ -191,9 +200,11 @@
             // player1BankBalance
             // 
             this.player1BankBalance.AutoSize = true;
-            this.player1BankBalance.Location = new System.Drawing.Point(203, 59);
+            this.player1BankBalance.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.player1BankBalance.Image = global::Poker.Properties.Resources.greenfelt;
+            this.player1BankBalance.Location = new System.Drawing.Point(20, 173);
             this.player1BankBalance.Name = "player1BankBalance";
-            this.player1BankBalance.Size = new System.Drawing.Size(106, 13);
+            this.player1BankBalance.Size = new System.Drawing.Size(208, 24);
             this.player1BankBalance.TabIndex = 4;
             this.player1BankBalance.Text = "                                 ";
             // 
@@ -202,14 +213,13 @@
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.panel1.Controls.Add(this.flopCard5);
             this.panel1.Controls.Add(this.flopCard4);
-            this.panel1.Controls.Add(this.flopLabel);
             this.panel1.Controls.Add(this.flopCard3);
             this.panel1.Controls.Add(this.flopCard2);
             this.panel1.Controls.Add(this.flopCard1);
             this.panel1.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.panel1.Location = new System.Drawing.Point(401, 251);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(487, 177);
+            this.panel1.Size = new System.Drawing.Size(483, 177);
             this.panel1.TabIndex = 17;
             this.panel1.Tag = "sdf";
             // 
@@ -229,15 +239,6 @@
             this.flopCard4.TabIndex = 19;
             this.flopCard4.TabStop = false;
             // 
-            // flopLabel
-            // 
-            this.flopLabel.AutoSize = true;
-            this.flopLabel.Location = new System.Drawing.Point(20, 11);
-            this.flopLabel.Name = "flopLabel";
-            this.flopLabel.Size = new System.Drawing.Size(27, 13);
-            this.flopLabel.TabIndex = 18;
-            this.flopLabel.Text = "Flop";
-            // 
             // groupBox2
             // 
             this.groupBox2.BackgroundImage = global::Poker.Properties.Resources.greenfelt;
@@ -245,6 +246,8 @@
             this.groupBox2.Controls.Add(this.player2Card1);
             this.groupBox2.Controls.Add(this.player2Card2);
             this.groupBox2.Controls.Add(this.player2ResultLabel);
+            this.groupBox2.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox2.ForeColor = System.Drawing.SystemColors.Control;
             this.groupBox2.Location = new System.Drawing.Point(15, 428);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(484, 210);
@@ -255,9 +258,11 @@
             // player2BankBalance
             // 
             this.player2BankBalance.AutoSize = true;
-            this.player2BankBalance.Location = new System.Drawing.Point(203, 63);
+            this.player2BankBalance.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.player2BankBalance.Image = global::Poker.Properties.Resources.greenfelt;
+            this.player2BankBalance.Location = new System.Drawing.Point(20, 172);
             this.player2BankBalance.Name = "player2BankBalance";
-            this.player2BankBalance.Size = new System.Drawing.Size(106, 13);
+            this.player2BankBalance.Size = new System.Drawing.Size(208, 24);
             this.player2BankBalance.TabIndex = 5;
             this.player2BankBalance.Text = "                                 ";
             // 
@@ -268,6 +273,8 @@
             this.groupBox3.Controls.Add(this.player3Card2);
             this.groupBox3.Controls.Add(this.player3Card1);
             this.groupBox3.Controls.Add(this.player3ResultLabel);
+            this.groupBox3.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox3.ForeColor = System.Drawing.SystemColors.Control;
             this.groupBox3.Location = new System.Drawing.Point(722, 35);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(484, 210);
@@ -278,9 +285,13 @@
             // player3BankBalance
             // 
             this.player3BankBalance.AutoSize = true;
-            this.player3BankBalance.Location = new System.Drawing.Point(206, 59);
+            this.player3BankBalance.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.player3BankBalance.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.player3BankBalance.ForeColor = System.Drawing.SystemColors.Control;
+            this.player3BankBalance.Image = global::Poker.Properties.Resources.greenfelt;
+            this.player3BankBalance.Location = new System.Drawing.Point(20, 173);
             this.player3BankBalance.Name = "player3BankBalance";
-            this.player3BankBalance.Size = new System.Drawing.Size(106, 13);
+            this.player3BankBalance.Size = new System.Drawing.Size(208, 24);
             this.player3BankBalance.TabIndex = 13;
             this.player3BankBalance.Text = "                                 ";
             // 
@@ -303,10 +314,13 @@
             // player3ResultLabel
             // 
             this.player3ResultLabel.AutoSize = true;
+            this.player3ResultLabel.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.player3ResultLabel.Image = global::Poker.Properties.Resources.greenfelt;
             this.player3ResultLabel.Location = new System.Drawing.Point(20, 29);
             this.player3ResultLabel.Name = "player3ResultLabel";
-            this.player3ResultLabel.Size = new System.Drawing.Size(0, 13);
+            this.player3ResultLabel.Size = new System.Drawing.Size(133, 19);
             this.player3ResultLabel.TabIndex = 1;
+            this.player3ResultLabel.Text = "                               ";
             // 
             // groupBox4
             // 
@@ -315,6 +329,8 @@
             this.groupBox4.Controls.Add(this.player4ResultLabel);
             this.groupBox4.Controls.Add(this.player4Card1);
             this.groupBox4.Controls.Add(this.player4Card2);
+            this.groupBox4.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox4.ForeColor = System.Drawing.SystemColors.Control;
             this.groupBox4.Location = new System.Drawing.Point(722, 428);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(484, 210);
@@ -325,19 +341,26 @@
             // player4BankBalance
             // 
             this.player4BankBalance.AutoSize = true;
-            this.player4BankBalance.Location = new System.Drawing.Point(206, 63);
+            this.player4BankBalance.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.player4BankBalance.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.player4BankBalance.ForeColor = System.Drawing.SystemColors.Control;
+            this.player4BankBalance.Image = global::Poker.Properties.Resources.greenfelt;
+            this.player4BankBalance.Location = new System.Drawing.Point(20, 172);
             this.player4BankBalance.Name = "player4BankBalance";
-            this.player4BankBalance.Size = new System.Drawing.Size(106, 13);
+            this.player4BankBalance.Size = new System.Drawing.Size(208, 24);
             this.player4BankBalance.TabIndex = 14;
             this.player4BankBalance.Text = "                                 ";
             // 
             // player4ResultLabel
             // 
             this.player4ResultLabel.AutoSize = true;
+            this.player4ResultLabel.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.player4ResultLabel.Image = global::Poker.Properties.Resources.greenfelt;
             this.player4ResultLabel.Location = new System.Drawing.Point(20, 30);
             this.player4ResultLabel.Name = "player4ResultLabel";
-            this.player4ResultLabel.Size = new System.Drawing.Size(0, 13);
+            this.player4ResultLabel.Size = new System.Drawing.Size(129, 19);
             this.player4ResultLabel.TabIndex = 13;
+            this.player4ResultLabel.Text = "                              ";
             // 
             // player4Card1
             // 
@@ -374,15 +397,6 @@
             this.player1StakeTextBox.Text = "Enter Player 1 Stake...";
             this.player1StakeTextBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.player1StakeTextBox_MouseClick);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(578, 458);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 13);
-            this.label1.TabIndex = 22;
-            this.label1.Text = "POT";
-            // 
             // potLabel
             // 
             this.potLabel.AutoSize = true;
@@ -411,7 +425,6 @@
             this.ClientSize = new System.Drawing.Size(1218, 671);
             this.Controls.Add(this.claimButton);
             this.Controls.Add(this.potLabel);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.player1StakeTextBox);
             this.Controls.Add(this.player1Stake);
             this.Controls.Add(this.groupBox4);
@@ -434,7 +447,6 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.flopCard5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.flopCard4)).EndInit();
             this.groupBox2.ResumeLayout(false);
@@ -467,7 +479,6 @@
         private System.Windows.Forms.PictureBox flopCard3;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label flopLabel;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.PictureBox flopCard5;
         private System.Windows.Forms.PictureBox flopCard4;
@@ -485,7 +496,6 @@
         private System.Windows.Forms.Label player4BankBalance;
         private System.Windows.Forms.Button player1Stake;
         private System.Windows.Forms.TextBox player1StakeTextBox;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label potLabel;
         private System.Windows.Forms.Button claimButton;
     }

@@ -26,6 +26,13 @@ namespace Poker
             player1Stake.Enabled = false;
             claimButton.Enabled = false;
             displayCardBacks();
+
+            player1BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player1.BankBalance);
+            player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player2.BankBalance);
+            player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player3.BankBalance);
+            player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player4.BankBalance);
+            gameResultLabel.Text = "CLICK PLAY...";
+
         }
 
         private void displayCardBacks()
@@ -53,7 +60,17 @@ namespace Poker
             List<PictureBox> player4PictureBoxes = new List<PictureBox>() { player4Card1, player4Card2 };
             List<PictureBox> flopPictureBoxes = new List<PictureBox>() { flopCard1, flopCard2, flopCard3, flopCard4, flopCard5 };
 
-            if (game.FirstClick)
+            //if (game.Player1.BankBalance == 0)
+            if (game.GameOver)
+            {
+                gameResultLabel.Text = "GAME OVER...";
+                playButton.Enabled = false;
+                claimButton.Enabled = false;
+                player1Stake.Enabled = false;
+                player1StakeTextBox.Enabled = false;
+            }
+
+            else if (game.FirstClick)
             {
                 playButton.Enabled = false;
                 gameResultLabel.Text = "ENTER STAKE";
@@ -153,13 +170,33 @@ namespace Poker
 
             else
             {
-                if (stake <= game.Player1.BankBalance && stake > 0)
+                if (stake <= game.Player1.BankBalance && stake >= 0)
                 {
-                    game.Player1.Bet = stake;
-                    gameResultLabel.Text = "Stake of " + String.Format("{0:C}", stake) + " received...";
-                    playButton.Enabled = true;
-                    player1Stake.Enabled = false;
-                    player1StakeTextBox.Enabled = false;
+                    if (game.Player1.BankBalance > 0 && stake == 0)
+                    {
+                        gameResultLabel.Text = "Input not understood...";
+                        return;
+                    }
+
+                    else if (game.Player1.BankBalance == 0 && stake == 0)
+                    {
+                        game.Player1.Bet = stake;
+                        gameResultLabel.Text = "ALL IN ...";
+                        playButton.Enabled = true;
+                        player1Stake.Enabled = false;
+                        player1StakeTextBox.Enabled = false;
+                    }
+
+
+                    else
+                    {
+                        game.Player1.Bet = stake;
+                        gameResultLabel.Text = String.Format("{0:C}", stake) + " STAKED...";
+                        playButton.Enabled = true;
+                        player1Stake.Enabled = false;
+                        player1StakeTextBox.Enabled = false;
+                    }
+
                 }
 
                 else
@@ -204,6 +241,13 @@ namespace Poker
 
             playButton.Enabled = true;
             claimButton.Enabled = false;
+
+            if (game.Player1.BankBalance > 0)
+            {
+                game.Player1.Bankruptc = false;
+                game.GameOver = false;
+            }
+
         }
 
     }

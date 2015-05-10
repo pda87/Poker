@@ -21,6 +21,7 @@ namespace Poker
         public int Pot { get; set; }
         public bool EndGame { get; set; }
         public bool ResetGame { get; set; }
+        public bool GameOver { get; set; }
 
         public Game()
         {
@@ -57,28 +58,79 @@ namespace Poker
         {
             if (this.ResetGame)
             {
+                this.checkBankruptcy();
+
                 this.DisplayGameResults(gameResultLabel);
 
                 this.EndGame = false;
                 this.ResetGame = false;
                 this.Flop.Clear();
-                gameResultLabel.Text = "";
+                gameResultLabel.Text = "CLICK PLAY...";
+
+                if (this.Player1.Bankruptc)
+                {
+                    this.GameOver = true;
+                }
             }
 
             else if (this.EndGame)
             {
-                this.DisplayPlayerResults(this.Player2.OutputString, this.Player2, player2ResultLabel, player2BankBalance, player2PictureBoxes);
-                this.DisplayPlayerResults(this.Player3.OutputString, this.Player3, player3ResultLabel, player3BankBalance, player3PictureBoxes);
-                this.DisplayPlayerResults(this.Player4.OutputString, this.Player4, player4ResultLabel, player4BankBalance, player4PictureBoxes);
+                this.checkBankruptcy();
+
+                if (!this.Player2.Bankruptc)
+                {
+                    this.DisplayPlayerResults(this.Player2.OutputString, this.Player2, player2ResultLabel, player2BankBalance, player2PictureBoxes);
+                }
+
+                if (!this.Player3.Bankruptc)
+                {
+                    this.DisplayPlayerResults(this.Player3.OutputString, this.Player3, player3ResultLabel, player3BankBalance, player3PictureBoxes);
+                }
+
+                if (!this.Player4.Bankruptc)
+                {
+                    this.DisplayPlayerResults(this.Player4.OutputString, this.Player4, player4ResultLabel, player4BankBalance, player4PictureBoxes);
+                }
+
                 this.DisplayGameResults(gameResultLabel);
                 this.ResetGame = true;
+
+                if (this.Player1.Bankruptc)
+                {
+                    this.GameOver = true;
+                }
             }
 
+            #region flop5
             if (this.Flop.Count == 5)
             {
-                this.EndGame = true;
-            }
+                this.checkBankruptcy();
 
+                this.EndGame = true;
+
+                this.Player2.Bet = 5;
+                this.Player3.Bet = 5;
+                this.Player4.Bet = 5;
+
+                this.potManager(potLabel);
+
+                player1BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player1.BankBalance);
+                player1BankBalance.Refresh();
+                player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player2.BankBalance);
+                player2BankBalance.Refresh();
+                player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player3.BankBalance);
+                player3BankBalance.Refresh();
+                player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player4.BankBalance);
+                player4BankBalance.Refresh();
+
+                if (this.Player1.Bankruptc)
+                {
+                    this.GameOver = true;
+                }
+            }
+            #endregion
+
+            #region flop4
             else if (this.Flop.Count == 4)
             {
                 this.GenerateFlop(1);
@@ -86,29 +138,39 @@ namespace Poker
                 flopPictureBoxes[4].ImageLocation = this.Flop[4].Image;
                 flopPictureBoxes[4].SizeMode = PictureBoxSizeMode.AutoSize;
 
-                this.flopCombinations(this.Player1, 0, 1, 4);
-                this.flopCombinations(this.Player1, 1, 2, 4);
-                this.flopCombinations(this.Player1, 2, 3, 4);
-                this.flopCombinations(this.Player2, 0, 1, 4);
-                this.flopCombinations(this.Player2, 1, 2, 4);
-                this.flopCombinations(this.Player2, 2, 3, 4);
-                this.flopCombinations(this.Player3, 0, 1, 4);
-                this.flopCombinations(this.Player3, 1, 2, 4);
-                this.flopCombinations(this.Player3, 2, 3, 4);
-                this.flopCombinations(this.Player4, 0, 1, 4);
-                this.flopCombinations(this.Player4, 1, 2, 4);
-                this.flopCombinations(this.Player4, 2, 3, 4);
+                this.Player2.Bet = 5;
+                this.Player3.Bet = 5;
+                this.Player4.Bet = 5;
 
-                this.CheckHandCombinations(this.Player1);
-                this.CheckHandCombinations(this.Player2);
-                this.CheckHandCombinations(this.Player3);
-                this.CheckHandCombinations(this.Player4);
+                this.potManager(potLabel);
+
+                player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player2.BankBalance);
+                player2BankBalance.Refresh();
+                player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player3.BankBalance);
+                player3BankBalance.Refresh();
+                player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player4.BankBalance);
+                player4BankBalance.Refresh();
+
+                foreach (Player player in this.PlayerList)
+                {
+                    //if (player.Bankruptc)
+                    //{
+                    //    continue;
+                    //}
+
+                    this.flopCombinations(player, 0, 1, 4);
+                    this.flopCombinations(player, 1, 2, 4);
+                    this.flopCombinations(player, 2, 3, 4);
+                    this.CheckHandCombinations(player);
+                }
 
                 this.DisplayPlayerResults(this.Player1.OutputString, this.Player1, player1ResultLabel, player1BankBalance, player1PictureBoxes);
                 this.EndGame = true;
 
             }
+            #endregion
 
+            #region flop3
             else if (this.Flop.Count == 3)
             {
                 this.GenerateFlop(1);
@@ -116,25 +178,41 @@ namespace Poker
                 flopPictureBoxes[3].ImageLocation = this.Flop[3].Image;
                 flopPictureBoxes[3].SizeMode = PictureBoxSizeMode.AutoSize;
 
-                this.flopCombinations(this.Player1, 0, 1, 3);
-                this.flopCombinations(this.Player1, 1, 2, 3);
-                this.flopCombinations(this.Player2, 0, 1, 3);
-                this.flopCombinations(this.Player2, 1, 2, 3);
-                this.flopCombinations(this.Player3, 0, 1, 3);
-                this.flopCombinations(this.Player3, 1, 2, 3);
-                this.flopCombinations(this.Player4, 0, 1, 3);
-                this.flopCombinations(this.Player4, 1, 2, 3);
+                this.Player2.Bet = 5;
+                this.Player3.Bet = 5;
+                this.Player4.Bet = 5;
 
-                this.CheckHandCombinations(this.Player1);
-                this.CheckHandCombinations(this.Player2);
-                this.CheckHandCombinations(this.Player3);
-                this.CheckHandCombinations(this.Player4);
+                this.potManager(potLabel);
+
+                player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player2.BankBalance);
+                player2BankBalance.Refresh();
+                player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player3.BankBalance);
+                player3BankBalance.Refresh();
+                player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player4.BankBalance);
+                player4BankBalance.Refresh();
+
+                foreach (Player player in this.PlayerList)
+                {
+                    //if (player.Bankruptc)
+                    //{
+                    //    continue;
+                    //}
+
+                    this.flopCombinations(player, 0, 1, 3);
+                    this.flopCombinations(player, 1, 2, 3);
+                    this.CheckHandCombinations(player);
+                }
 
                 this.DisplayPlayerResults(this.Player1.OutputString, this.Player1, player1ResultLabel, player1BankBalance, player1PictureBoxes);
             }
-            
+            #endregion
+
+            #region flop0
+
             else if (this.Flop.Count == 0)
             {
+                //this.checkBankruptcy();
+
                 foreach (PictureBox pictureBox in player2PictureBoxes)
                 {
                     pictureBox.ImageLocation = @"CardImages/CardBacks/blue.png";
@@ -173,28 +251,69 @@ namespace Poker
                 this.Player3.Bet = 5;
                 this.Player4.Bet = 5;
 
+                this.potManager(potLabel);
+
+                player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player2.BankBalance);
+                player2BankBalance.Refresh();
+                player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player3.BankBalance);
+                player3BankBalance.Refresh();
+                player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player4.BankBalance);
+                player4BankBalance.Refresh();
+
                 foreach (Player player in this.PlayerList)
                 {
-                    player.BankBalance -= player.Bet;
+                    //if (player.Bankruptc)
+                    //{
+                    //    continue;
+                    //}
+
+                    this.flopCombinations(player, 0, 1, 2);
+                    this.CheckHandCombinations(player);
                 }
-
-                this.Pot = this.Player1.Bet + this.Player2.Bet + this.Player3.Bet + this.Player4.Bet;
-
-                potLabel.Text = String.Format("{0:C}", this.Pot);
-
-                this.flopCombinations(this.Player1, 0, 1, 2);
-                this.flopCombinations(this.Player2, 0, 1, 2);
-                this.flopCombinations(this.Player3, 0, 1, 2);
-                this.flopCombinations(this.Player4, 0, 1, 2);
-
-                this.CheckHandCombinations(this.Player1);
-                this.CheckHandCombinations(this.Player2);
-                this.CheckHandCombinations(this.Player3);
-                this.CheckHandCombinations(this.Player4);
 
                 this.DisplayPlayerResults(this.Player1.OutputString, this.Player1, player1ResultLabel, player1BankBalance, player1PictureBoxes);
             }
+            #endregion
         }
+
+        private void checkBankruptcy()
+        {
+            foreach (Player player in this.PlayerList)
+            {
+                if (player.BankBalance == 0)
+                {
+                    player.Bankruptc = true;
+                }
+            }
+ 
+        }
+
+        private void potManager(Label potLabel)
+        {
+            foreach (Player player in this.PlayerList)
+            {
+                player.BankBalance -= player.Bet;
+
+                if (player.BankBalance <= 0)
+                {
+                    player.BankBalance = 0;
+                }
+            }
+
+            foreach (Player player in this.PlayerList)
+            {
+                if (player.Bankruptc)
+                {
+                    continue;
+                }
+                this.Pot += player.Bet;
+            }
+
+            potLabel.Text = String.Format("{0:C}", this.Pot);
+            potLabel.Refresh();
+ 
+        }
+
 
         public void Payout(Label gameResultLabel)
         {

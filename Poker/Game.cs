@@ -22,6 +22,8 @@ namespace Poker
         public bool EndGame { get; set; }
         public bool ResetGame { get; set; }
         public bool GameOver { get; set; }
+        public int RoundNumber { get; set; }
+        public BetManager BetManager { get; set; }
 
         public Game()
         {
@@ -49,6 +51,11 @@ namespace Poker
             this.DeckCount = 51;
 
             this.EndGame = false;
+            this.RoundNumber = 1;
+
+            
+
+            this.BetManager = new BetManager(this.PlayerList);
         }
 
         public void PlayGame(List<PictureBox> flopPictureBoxes, Label player1ResultLabel, Label player2ResultLabel, Label player3ResultLabel,
@@ -56,6 +63,32 @@ namespace Poker
             List<PictureBox> player1PictureBoxes, List<PictureBox> player2PictureBoxes, List<PictureBox> player3PictureBoxes,
             List<PictureBox> player4PictureBoxes, Label gameResultLabel, Label potLabel)
         {
+
+            List<Player> computerPlayers = new List<Player>() { this.Player2, this.Player3, this.Player4 };
+
+            foreach (Player player in computerPlayers)
+            {
+                if (player.BankBalance > 0)
+                {
+                    this.BetManager.CalculateBet(player);
+                }
+
+                else if (player.BankBalance == 0)
+                {
+                    player.Bet = 0;
+                }
+            }
+
+            this.BetManager.BetOutput.Clear();
+
+            this.BetManager.BetOutput.AppendLine("BETS:")
+                .AppendLine("GAME: " + this.RoundNumber)
+                .AppendLine("Player 1: " + String.Format("{0:C}", this.Player1.Bet).ToUpper())
+                .AppendLine("Player 2: " + String.Format("{0:C}", this.Player2.Bet).ToUpper())
+                .AppendLine("Player 3: " + String.Format("{0:C}", this.Player3.Bet).ToUpper())
+                .AppendLine("Player 4 : " + String.Format("{0:C}", this.Player4.Bet).ToUpper());
+
+
             if (this.ResetGame)
             {
                 this.checkBankruptcy();
@@ -67,7 +100,7 @@ namespace Poker
                 this.Flop.Clear();
                 gameResultLabel.Text = "CLICK PLAY...";
 
-                if (this.Player1.Bankruptc)
+                if (this.Player1.Bankrupt)
                 {
                     this.GameOver = true;
                 }
@@ -77,17 +110,17 @@ namespace Poker
             {
                 this.checkBankruptcy();
 
-                if (!this.Player2.Bankruptc)
+                if (!this.Player2.Bankrupt)
                 {
                     this.DisplayPlayerResults(this.Player2.OutputString, this.Player2, player2ResultLabel, player2BankBalance, player2PictureBoxes);
                 }
 
-                if (!this.Player3.Bankruptc)
+                if (!this.Player3.Bankrupt)
                 {
                     this.DisplayPlayerResults(this.Player3.OutputString, this.Player3, player3ResultLabel, player3BankBalance, player3PictureBoxes);
                 }
 
-                if (!this.Player4.Bankruptc)
+                if (!this.Player4.Bankrupt)
                 {
                     this.DisplayPlayerResults(this.Player4.OutputString, this.Player4, player4ResultLabel, player4BankBalance, player4PictureBoxes);
                 }
@@ -95,10 +128,19 @@ namespace Poker
                 this.DisplayGameResults(gameResultLabel);
                 this.ResetGame = true;
 
-                if (this.Player1.Bankruptc)
+                if (this.Player1.Bankrupt)
                 {
                     this.GameOver = true;
                 }
+
+                this.RoundNumber++;
+                this.BetManager.PlayOrder++;
+
+                if (this.BetManager.PlayOrder == 4)
+                {
+                    this.BetManager.PlayOrder = 0;
+                }
+
             }
 
             #region flop5
@@ -108,9 +150,9 @@ namespace Poker
 
                 this.EndGame = true;
 
-                this.Player2.Bet = 5;
-                this.Player3.Bet = 5;
-                this.Player4.Bet = 5;
+                //this.Player2.Bet = 5;
+                //this.Player3.Bet = 5;
+                //this.Player4.Bet = 5;
 
                 this.potManager(potLabel);
 
@@ -123,7 +165,7 @@ namespace Poker
                 player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player4.BankBalance);
                 player4BankBalance.Refresh();
 
-                if (this.Player1.Bankruptc)
+                if (this.Player1.Bankrupt)
                 {
                     this.GameOver = true;
                 }
@@ -138,9 +180,9 @@ namespace Poker
                 flopPictureBoxes[4].ImageLocation = this.Flop[4].Image;
                 flopPictureBoxes[4].SizeMode = PictureBoxSizeMode.AutoSize;
 
-                this.Player2.Bet = 5;
-                this.Player3.Bet = 5;
-                this.Player4.Bet = 5;
+                ///this.Player2.Bet = 5;
+               // this.Player3.Bet = 5;
+                //this.Player4.Bet = 5;
 
                 this.potManager(potLabel);
 
@@ -153,10 +195,10 @@ namespace Poker
 
                 foreach (Player player in this.PlayerList)
                 {
-                    //if (player.Bankruptc)
-                    //{
-                    //    continue;
-                    //}
+                    if (player.Bankrupt)
+                    {
+                        continue;
+                    }
 
                     this.flopCombinations(player, 0, 1, 4);
                     this.flopCombinations(player, 1, 2, 4);
@@ -178,9 +220,9 @@ namespace Poker
                 flopPictureBoxes[3].ImageLocation = this.Flop[3].Image;
                 flopPictureBoxes[3].SizeMode = PictureBoxSizeMode.AutoSize;
 
-                this.Player2.Bet = 5;
-                this.Player3.Bet = 5;
-                this.Player4.Bet = 5;
+                //this.Player2.Bet = 5;
+                //this.Player3.Bet = 5;
+                //this.Player4.Bet = 5;
 
                 this.potManager(potLabel);
 
@@ -193,10 +235,10 @@ namespace Poker
 
                 foreach (Player player in this.PlayerList)
                 {
-                    //if (player.Bankruptc)
-                    //{
-                    //    continue;
-                    //}
+                    if (player.Bankrupt)
+                    {
+                        continue;
+                    }
 
                     this.flopCombinations(player, 0, 1, 3);
                     this.flopCombinations(player, 1, 2, 3);
@@ -211,7 +253,9 @@ namespace Poker
 
             else if (this.Flop.Count == 0)
             {
-                //this.checkBankruptcy();
+
+
+
 
                 foreach (PictureBox pictureBox in player2PictureBoxes)
                 {
@@ -247,10 +291,6 @@ namespace Poker
                 this.GenerateRandomHand(this.Player3);
                 this.GenerateRandomHand(this.Player4);
 
-                this.Player2.Bet = 5;
-                this.Player3.Bet = 5;
-                this.Player4.Bet = 5;
-
                 this.potManager(potLabel);
 
                 player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player2.BankBalance);
@@ -262,10 +302,10 @@ namespace Poker
 
                 foreach (Player player in this.PlayerList)
                 {
-                    //if (player.Bankruptc)
-                    //{
-                    //    continue;
-                    //}
+                    if (player.Bankrupt)
+                    {
+                        continue;
+                    }
 
                     this.flopCombinations(player, 0, 1, 2);
                     this.CheckHandCombinations(player);
@@ -282,7 +322,7 @@ namespace Poker
             {
                 if (player.BankBalance == 0)
                 {
-                    player.Bankruptc = true;
+                    player.Bankrupt = true;
                 }
             }
  
@@ -302,7 +342,7 @@ namespace Poker
 
             foreach (Player player in this.PlayerList)
             {
-                if (player.Bankruptc)
+                if (player.Bankrupt)
                 {
                     continue;
                 }
@@ -313,7 +353,6 @@ namespace Poker
             potLabel.Refresh();
  
         }
-
 
         public void Payout(Label gameResultLabel)
         {
@@ -556,7 +595,7 @@ namespace Poker
         {
             playerResultLabel.Text = "";
 
-            playerResultLabel.Text = player.Name + ": " + player.OutputString;
+            playerResultLabel.Text = player.OutputString;
 
             for (int i = 0; i < 2; i++)
             {

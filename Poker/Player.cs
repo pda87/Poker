@@ -15,7 +15,7 @@ namespace Poker
         public int BankBalance { get; set; }
         public int Bet { get; set; }
         public Outcome WinOrLose { get; set; }
-        public bool Bankruptc { get; set; }
+        public bool Bankrupt { get; set; }
 
 
         public Player()
@@ -23,7 +23,7 @@ namespace Poker
             this.Hand = new Hand();
             this.HandCombinations = new List<Hand>();
             this.BankBalance = 100;
-            this.Bankruptc = false;
+            this.Bankrupt = false;
         }
 
         public enum Outcome

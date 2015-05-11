@@ -21,6 +21,7 @@ namespace Poker
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            roundLabel.Text = "GAME: " + game.RoundNumber.ToString();
             potLabel.Text = String.Format("{0:C}", 0);
             player1StakeTextBox.Enabled = false;
             player1Stake.Enabled = false;
@@ -52,6 +53,8 @@ namespace Poker
 
         private void playButton_Click(object sender, EventArgs e)
         {
+
+            roundLabel.Text = "GAME: " + game.RoundNumber.ToString();
             gameResultLabel.Text = "";
 
             List<PictureBox> player1PictureBoxes = new List<PictureBox>() { player1Card1, player1Card2 };
@@ -60,14 +63,24 @@ namespace Poker
             List<PictureBox> player4PictureBoxes = new List<PictureBox>() { player4Card1, player4Card2 };
             List<PictureBox> flopPictureBoxes = new List<PictureBox>() { flopCard1, flopCard2, flopCard3, flopCard4, flopCard5 };
 
-            //if (game.Player1.BankBalance == 0)
-            if (game.GameOver)
+            if (game.Player2.Bankrupt && game.Player3.Bankrupt && game.Player4.Bankrupt)
+            {
+                gameResultLabel.Text = "YOU WIN!";
+                playButton.Enabled = false;
+                claimButton.Enabled = false;
+                player1Stake.Enabled = false;
+                player1StakeTextBox.Enabled = false;
+                restartButton.Enabled = true;
+            }
+            
+            else if (game.GameOver)
             {
                 gameResultLabel.Text = "GAME OVER...";
                 playButton.Enabled = false;
                 claimButton.Enabled = false;
                 player1Stake.Enabled = false;
                 player1StakeTextBox.Enabled = false;
+                restartButton.Enabled = true;
             }
 
             else if (game.FirstClick)
@@ -154,6 +167,9 @@ namespace Poker
                 player1StakeTextBox.Enabled = true;
                 player1Stake.Enabled = true;
             }
+
+            betOutputLabel.Text = game.BetManager.BetOutput.ToString();
+
         }
 
         private void player1Stake_Click(object sender, EventArgs e)
@@ -215,6 +231,8 @@ namespace Poker
         private void claimButton_Click(object sender, EventArgs e)
         {
             potLabel.Text = String.Format("{0:C}", 0);
+            betOutputLabel.Text = "";
+            game.BetManager.BetOutput.Clear();
 
             player1ResultLabel.Text = "";
             player2ResultLabel.Text = "";
@@ -244,11 +262,37 @@ namespace Poker
 
             if (game.Player1.BankBalance > 0)
             {
-                game.Player1.Bankruptc = false;
+                game.Player1.Bankrupt = false;
                 game.GameOver = false;
             }
 
         }
+
+        private void restartButton_Click(object sender, EventArgs e)
+        {
+            restartButton.Enabled = false;
+            game = new Game();
+
+            player1BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player1.BankBalance);
+            player1BankBalance.Refresh();
+            player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player2.BankBalance);
+            player2BankBalance.Refresh();
+            player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player3.BankBalance);
+            player3BankBalance.Refresh();
+            player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player4.BankBalance);
+            player4BankBalance.Refresh();
+
+            displayCardBacks();
+            gameResultLabel.Text = "CLICK PLAY...";
+            player1Stake.Enabled = false;
+            player1StakeTextBox.Enabled = false;
+            playButton.Enabled = true;
+            roundLabel.Text = "GAME: " + game.RoundNumber.ToString();
+            betOutputLabel.Text = "";
+            roundLabel.Refresh();
+        }
+
+
 
     }
 }

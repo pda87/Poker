@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.playButton = new System.Windows.Forms.Button();
             this.player1ResultLabel = new System.Windows.Forms.Label();
             this.player1Card1 = new System.Windows.Forms.PictureBox();
@@ -60,6 +61,9 @@
             this.player1StakeTextBox = new System.Windows.Forms.TextBox();
             this.potLabel = new System.Windows.Forms.Label();
             this.claimButton = new System.Windows.Forms.Button();
+            this.roundLabel = new System.Windows.Forms.Label();
+            this.restartButton = new System.Windows.Forms.Button();
+            this.betOutputLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.player1Card1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1Card2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2Card2)).BeginInit();
@@ -248,7 +252,7 @@
             this.groupBox2.Controls.Add(this.player2ResultLabel);
             this.groupBox2.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.SystemColors.Control;
-            this.groupBox2.Location = new System.Drawing.Point(15, 428);
+            this.groupBox2.Location = new System.Drawing.Point(722, 35);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(484, 210);
             this.groupBox2.TabIndex = 18;
@@ -275,7 +279,7 @@
             this.groupBox3.Controls.Add(this.player3ResultLabel);
             this.groupBox3.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.ForeColor = System.Drawing.SystemColors.Control;
-            this.groupBox3.Location = new System.Drawing.Point(722, 35);
+            this.groupBox3.Location = new System.Drawing.Point(722, 434);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(484, 210);
             this.groupBox3.TabIndex = 18;
@@ -331,7 +335,7 @@
             this.groupBox4.Controls.Add(this.player4Card2);
             this.groupBox4.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox4.ForeColor = System.Drawing.SystemColors.Control;
-            this.groupBox4.Location = new System.Drawing.Point(722, 428);
+            this.groupBox4.Location = new System.Drawing.Point(15, 434);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(484, 210);
             this.groupBox4.TabIndex = 19;
@@ -417,18 +421,55 @@
             this.claimButton.UseVisualStyleBackColor = true;
             this.claimButton.Click += new System.EventHandler(this.claimButton_Click);
             // 
+            // roundLabel
+            // 
+            this.roundLabel.AutoSize = true;
+            this.roundLabel.Font = new System.Drawing.Font("Arial", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.roundLabel.Image = global::Poker.Properties.Resources.greenfelt;
+            this.roundLabel.Location = new System.Drawing.Point(916, 319);
+            this.roundLabel.Name = "roundLabel";
+            this.roundLabel.Size = new System.Drawing.Size(240, 44);
+            this.roundLabel.TabIndex = 25;
+            this.roundLabel.Text = "                      ";
+            // 
+            // restartButton
+            // 
+            this.restartButton.Enabled = false;
+            this.restartButton.Location = new System.Drawing.Point(514, 199);
+            this.restartButton.Name = "restartButton";
+            this.restartButton.Size = new System.Drawing.Size(75, 23);
+            this.restartButton.TabIndex = 26;
+            this.restartButton.Text = "Restart";
+            this.restartButton.UseVisualStyleBackColor = true;
+            this.restartButton.Click += new System.EventHandler(this.restartButton_Click);
+            // 
+            // betOutputLabel
+            // 
+            this.betOutputLabel.AutoSize = true;
+            this.betOutputLabel.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.betOutputLabel.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.betOutputLabel.Image = global::Poker.Properties.Resources.greenfelt;
+            this.betOutputLabel.Location = new System.Drawing.Point(1268, 64);
+            this.betOutputLabel.Name = "betOutputLabel";
+            this.betOutputLabel.Size = new System.Drawing.Size(257, 114);
+            this.betOutputLabel.TabIndex = 27;
+            this.betOutputLabel.Text = resources.GetString("betOutputLabel.Text");
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Poker.Properties.Resources.greenfelt;
-            this.ClientSize = new System.Drawing.Size(1218, 671);
+            this.ClientSize = new System.Drawing.Size(1542, 671);
+            this.Controls.Add(this.betOutputLabel);
+            this.Controls.Add(this.restartButton);
+            this.Controls.Add(this.roundLabel);
             this.Controls.Add(this.claimButton);
             this.Controls.Add(this.potLabel);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.player1StakeTextBox);
             this.Controls.Add(this.player1Stake);
             this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);
@@ -498,6 +539,9 @@
         private System.Windows.Forms.TextBox player1StakeTextBox;
         private System.Windows.Forms.Label potLabel;
         private System.Windows.Forms.Button claimButton;
+        private System.Windows.Forms.Label roundLabel;
+        private System.Windows.Forms.Button restartButton;
+        private System.Windows.Forms.Label betOutputLabel;
     }
 }
 

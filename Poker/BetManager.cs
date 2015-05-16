@@ -71,6 +71,11 @@ namespace Poker
                 player.Bet = this.RandomNumber.Next(1, player.BankBalance);
             }
 
+            if (player.Bet == 0)
+            {
+                player.Bet = 1;
+            }
+
         }
 
 

@@ -155,7 +155,7 @@
             this.gameResultLabel.Font = new System.Drawing.Font("Arial", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gameResultLabel.ForeColor = System.Drawing.SystemColors.Control;
             this.gameResultLabel.Image = global::Poker.Properties.Resources.greenfelt;
-            this.gameResultLabel.Location = new System.Drawing.Point(23, 319);
+            this.gameResultLabel.Location = new System.Drawing.Point(32, 357);
             this.gameResultLabel.Name = "gameResultLabel";
             this.gameResultLabel.Size = new System.Drawing.Size(263, 32);
             this.gameResultLabel.TabIndex = 13;
@@ -426,7 +426,7 @@
             this.roundLabel.AutoSize = true;
             this.roundLabel.Font = new System.Drawing.Font("Arial", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.roundLabel.Image = global::Poker.Properties.Resources.greenfelt;
-            this.roundLabel.Location = new System.Drawing.Point(916, 319);
+            this.roundLabel.Location = new System.Drawing.Point(31, 293);
             this.roundLabel.Name = "roundLabel";
             this.roundLabel.Size = new System.Drawing.Size(240, 44);
             this.roundLabel.TabIndex = 25;
@@ -446,10 +446,11 @@
             // betOutputLabel
             // 
             this.betOutputLabel.AutoSize = true;
-            this.betOutputLabel.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.betOutputLabel.BackColor = System.Drawing.SystemColors.ControlLight;
             this.betOutputLabel.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.betOutputLabel.ForeColor = System.Drawing.SystemColors.Control;
             this.betOutputLabel.Image = global::Poker.Properties.Resources.greenfelt;
-            this.betOutputLabel.Location = new System.Drawing.Point(1268, 64);
+            this.betOutputLabel.Location = new System.Drawing.Point(924, 293);
             this.betOutputLabel.Name = "betOutputLabel";
             this.betOutputLabel.Size = new System.Drawing.Size(257, 114);
             this.betOutputLabel.TabIndex = 27;
@@ -460,7 +461,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Poker.Properties.Resources.greenfelt;
-            this.ClientSize = new System.Drawing.Size(1542, 671);
+            this.ClientSize = new System.Drawing.Size(1226, 671);
             this.Controls.Add(this.betOutputLabel);
             this.Controls.Add(this.restartButton);
             this.Controls.Add(this.roundLabel);

@@ -27,28 +27,8 @@ namespace Poker
             player1Stake.Enabled = false;
             claimButton.Enabled = false;
             displayCardBacks();
-
-            player1BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player1.BankBalance);
-            player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player2.BankBalance);
-            player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player3.BankBalance);
-            player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player4.BankBalance);
+            displayPlayerBankBalances();
             gameResultLabel.Text = "CLICK PLAY...";
-
-        }
-
-        private void displayCardBacks()
-        {
-            List<PictureBox> pictureBoxes = new List<PictureBox>() { player1Card1, player1Card2,
-                                                                    flopCard1, flopCard2, flopCard3, flopCard4, flopCard5,
-                                                                    player2Card1, player2Card2,
-                                                                    player3Card1, player3Card2,
-                                                                    player4Card1, player4Card2};
-
-            foreach (PictureBox card in pictureBoxes)
-            {
-                card.ImageLocation = @"CardImages/CardBacks/blue.png";
-                card.SizeMode = PictureBoxSizeMode.AutoSize;
-            }
         }
 
         private void playButton_Click(object sender, EventArgs e)
@@ -74,7 +54,7 @@ namespace Poker
 
             else if (game.FirstClick)
             {
-                game.bettingRound(potLabel, betOutputLabel, player2BankBalance, player3BankBalance, player4BankBalance);
+                game.BetManager.bettingRound(game, potLabel, betOutputLabel, player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance);
 
                 playButton.Enabled = false;
                 gameResultLabel.Text = "ENTER STAKE";
@@ -112,17 +92,14 @@ namespace Poker
 
             else if (game.Flop.Count == 0 || game.Flop.Count == 3 || game.Flop.Count == 4 || game.Flop.Count == 5)
             {
-
-                game.bettingRound(potLabel, betOutputLabel, player2BankBalance, player3BankBalance, player4BankBalance);
+                game.BetManager.bettingRound(game, potLabel, betOutputLabel, player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance);
 
                 game.PlayGame(flopPictureBoxes, player1ResultLabel, player2ResultLabel, player3ResultLabel, player4ResultLabel,
                 player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance,
                 player1PictureBoxes, player2PictureBoxes, player3PictureBoxes, player4PictureBoxes, gameResultLabel, potLabel);
 
                 stakeMethod();
-
             }
-
         }
 
         private void stakeMethod()
@@ -179,6 +156,9 @@ namespace Poker
                         game.Player1.BankBalance -= stake;
                         player1BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player1.BankBalance);
                         player1BankBalance.Refresh();
+                        game.Pot += game.Player1.Bet;
+                        potLabel.Text = String.Format("{0:C}", game.Pot);
+                        potLabel.Refresh();
                     }
 
                 }
@@ -209,15 +189,7 @@ namespace Poker
             player4ResultLabel.Text = "";
 
             game.Payout(gameResultLabel);
-            player1BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player1.BankBalance);
-            player1BankBalance.Refresh();
-            player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player2.BankBalance);
-            player2BankBalance.Refresh();
-            player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player3.BankBalance);
-            player3BankBalance.Refresh();
-            player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player4.BankBalance);
-            player4BankBalance.Refresh();
-
+            displayPlayerBankBalances();
             displayCardBacks();
 
             gameResultLabel.Text = "";
@@ -254,15 +226,7 @@ namespace Poker
             restartButton.Enabled = false;
             game = new Game();
 
-            player1BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player1.BankBalance);
-            player1BankBalance.Refresh();
-            player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player2.BankBalance);
-            player2BankBalance.Refresh();
-            player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player3.BankBalance);
-            player3BankBalance.Refresh();
-            player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player4.BankBalance);
-            player4BankBalance.Refresh();
-
+            displayPlayerBankBalances();
             displayCardBacks();
             gameResultLabel.Text = "CLICK PLAY...";
             player1Stake.Enabled = false;
@@ -271,6 +235,33 @@ namespace Poker
             roundLabel.Text = "GAME: " + game.RoundNumber.ToString();
             betOutputLabel.Text = "";
             roundLabel.Refresh();
+        }
+
+        private void displayCardBacks()
+        {
+            List<PictureBox> pictureBoxes = new List<PictureBox>() { player1Card1, player1Card2,
+                                                                    flopCard1, flopCard2, flopCard3, flopCard4, flopCard5,
+                                                                    player2Card1, player2Card2,
+                                                                    player3Card1, player3Card2,
+                                                                    player4Card1, player4Card2};
+
+            foreach (PictureBox card in pictureBoxes)
+            {
+                card.ImageLocation = @"CardImages/CardBacks/blue.png";
+                card.SizeMode = PictureBoxSizeMode.AutoSize;
+            }
+        }
+
+        private void displayPlayerBankBalances()
+        {
+            player1BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player1.BankBalance);
+            player1BankBalance.Refresh();
+            player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player2.BankBalance);
+            player2BankBalance.Refresh();
+            player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player3.BankBalance);
+            player3BankBalance.Refresh();
+            player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", game.Player4.BankBalance);
+            player4BankBalance.Refresh();
         }
     }
 }

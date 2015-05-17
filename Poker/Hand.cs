@@ -21,6 +21,26 @@ namespace Poker
             this.SortedHand = new List<Card>();
         }
 
+        public void GenerateRandomHand(Game game, Player player)
+        {
+            Random random = new Random();
+
+            //TAKE 5 RANDOM CARDS FROM THE DECK OF CARDS
+            //USING 51 INSTEAD OF 52 FOR THE ARRAY ITERATION
+            //int deckCount = 51;
+
+            player.Hand.HandCardList = new List<Card>();
+
+            for (int i = 0; i < 2; i++)
+            {
+                int randomCard = random.Next(0, game.DeckCount - 1);
+
+                player.Hand.HandCardList.Add(game.GameDeck[randomCard]);
+                game.GameDeck.RemoveAt(randomCard);
+                game.DeckCount--;
+            }
+        }
+
     }
 
     public enum HandResult

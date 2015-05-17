@@ -58,56 +58,16 @@ namespace Poker
             this.BetManager = new BetManager(this.PlayerList);
         }
 
-        public void calculateBets()
+        public void displayPlayerBankBalances(Label player1BankBalance, Label player2BankBalance, Label player3BankBalance, Label player4BankBalance)
         {
-            List<Player> computerPlayers = new List<Player>() { this.Player2, this.Player3, this.Player4 };
-
-            foreach (Player player in computerPlayers)
-            {
-                if (player.BankBalance > 0)
-                {
-                    this.BetManager.CalculateBet(player);
-                }
-
-                else if (player.BankBalance == 0)
-                {
-                    player.Bet = 0;
-                }
-            }
-
-            this.BetManager.BetOutput.Clear();
-
-            this.BetManager.BetOutput.AppendLine("BETS:");
-            this.BetManager.BetOutput.AppendLine("GAME: " + this.RoundNumber);
-            
-            if (!this.Player2.Bankrupt)
-            {
-                this.BetManager.BetOutput.AppendLine("Player 2: " + String.Format("{0:C}", this.Player2.Bet).ToUpper());
-            }
-            
-            if (!this.Player3.Bankrupt)
-            {
-                this.BetManager.BetOutput.AppendLine("Player 3: " + String.Format("{0:C}", this.Player3.Bet).ToUpper());
-            }
-            
-            if (!this.Player4.Bankrupt)
-            {
-                this.BetManager.BetOutput.AppendLine("Player 4 : " + String.Format("{0:C}", this.Player4.Bet).ToUpper());
-            }
-        }
-
-        public void bettingRound(Label potLabel, Label betOutputLabel, Label player2BankBalance, Label player3BankBalance, Label player4BankBalance)
-        {
-            this.calculateBets();
-            this.potManager(potLabel);
-            betOutputLabel.Text = this.BetManager.BetOutput.ToString();
+            player1BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player1.BankBalance);
+            player1BankBalance.Refresh();
             player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player2.BankBalance);
             player2BankBalance.Refresh();
             player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player3.BankBalance);
             player3BankBalance.Refresh();
             player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player4.BankBalance);
             player4BankBalance.Refresh();
-
         }
 
         public void PlayGame(List<PictureBox> flopPictureBoxes, Label player1ResultLabel, Label player2ResultLabel, Label player3ResultLabel,
@@ -174,14 +134,7 @@ namespace Poker
             {
                 this.EndGame = true;
 
-                player1BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player1.BankBalance);
-                player1BankBalance.Refresh();
-                player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player2.BankBalance);
-                player2BankBalance.Refresh();
-                player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player3.BankBalance);
-                player3BankBalance.Refresh();
-                player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player4.BankBalance);
-                player4BankBalance.Refresh();
+                displayPlayerBankBalances(player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance);
 
                 if (this.Player1.Bankrupt)
                 {
@@ -198,12 +151,7 @@ namespace Poker
                 flopPictureBoxes[4].ImageLocation = this.Flop[4].Image;
                 flopPictureBoxes[4].SizeMode = PictureBoxSizeMode.AutoSize;
 
-                player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player2.BankBalance);
-                player2BankBalance.Refresh();
-                player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player3.BankBalance);
-                player3BankBalance.Refresh();
-                player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player4.BankBalance);
-                player4BankBalance.Refresh();
+                displayPlayerBankBalances(player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance);
 
                 foreach (Player player in this.PlayerList)
                 {
@@ -232,12 +180,7 @@ namespace Poker
                 flopPictureBoxes[3].ImageLocation = this.Flop[3].Image;
                 flopPictureBoxes[3].SizeMode = PictureBoxSizeMode.AutoSize;
 
-                player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player2.BankBalance);
-                player2BankBalance.Refresh();
-                player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player3.BankBalance);
-                player3BankBalance.Refresh();
-                player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player4.BankBalance);
-                player4BankBalance.Refresh();
+                displayPlayerBankBalances(player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance);
 
                 foreach (Player player in this.PlayerList)
                 {
@@ -289,19 +232,10 @@ namespace Poker
                 this.DeckCount = this.GameDeck.Count();
                 this.GenerateFlop(3);
                 this.DisplayFlop(flopPictureBoxes);
-                this.GenerateRandomHand(this.Player1);
-                this.GenerateRandomHand(this.Player2);
-                this.GenerateRandomHand(this.Player3);
-                this.GenerateRandomHand(this.Player4);
 
-                player1BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player1.BankBalance);
-                player1BankBalance.Refresh();
-                player2BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player2.BankBalance);
-                player2BankBalance.Refresh();
-                player3BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player3.BankBalance);
-                player3BankBalance.Refresh();
-                player4BankBalance.Text = "Player Balance: " + String.Format("{0:C}", this.Player4.BankBalance);
-                player4BankBalance.Refresh();
+                this.PlayerList.ForEach(player => player.Hand.GenerateRandomHand(this, player));
+
+                displayPlayerBankBalances(player1BankBalance, player2BankBalance, player3BankBalance, player4BankBalance);
 
                 foreach (Player player in this.PlayerList)
                 {
@@ -328,37 +262,6 @@ namespace Poker
                     player.Bankrupt = true;
                 }
             }
-        }
-
-        public void potManager(Label potLabel)
-        {
-            foreach (Player player in this.PlayerList)
-            {
-                if (player == this.Player1)
-                {
-                    continue;
-                }
-
-                player.BankBalance -= player.Bet;
-
-                if (player.BankBalance <= 0)
-                {
-                    player.BankBalance = 0;
-                }
-            }
-
-            foreach (Player player in this.PlayerList)
-            {
-                if (player.Bankrupt)
-                {
-                    continue;
-                }
-                this.Pot += player.Bet;
-            }
-
-            potLabel.Text = String.Format("{0:C}", this.Pot);
-            potLabel.Refresh();
-
         }
 
         public void Payout(Label gameResultLabel)
@@ -425,7 +328,7 @@ namespace Poker
             this.GameDeck.Clear();
         }
 
-        public void GenerateFlop(int flopSize)
+        private void GenerateFlop(int flopSize)
         {
             Random random = new Random();
 
@@ -439,7 +342,7 @@ namespace Poker
             }
         }
 
-        public void DisplayFlop(List<PictureBox> flopPictureBoxes)
+        private void DisplayFlop(List<PictureBox> flopPictureBoxes)
         {
             for (int i = 0; i < 3; i++)
             {
@@ -448,27 +351,7 @@ namespace Poker
             }
         }
 
-        public void GenerateRandomHand(Player player)
-        {
-            Random random = new Random();
-
-            //TAKE 5 RANDOM CARDS FROM THE DECK OF CARDS
-            //USING 51 INSTEAD OF 52 FOR THE ARRAY ITERATION
-            //int deckCount = 51;
-
-            player.Hand.HandCardList = new List<Card>();
-
-            for (int i = 0; i < 2; i++)
-            {
-                int randomCard = random.Next(0, this.DeckCount - 1);
-
-                player.Hand.HandCardList.Add(GameDeck[randomCard]);
-                this.GameDeck.RemoveAt(randomCard);
-                this.DeckCount--;
-            }
-        }
-
-        public void flopCombinations(Player player, int firstFlopCard, int secondFlopCard, int thirdFlopCard)
+        private void flopCombinations(Player player, int firstFlopCard, int secondFlopCard, int thirdFlopCard)
         {
             List<Card> handBuilder = new List<Card>();
 
@@ -510,7 +393,7 @@ namespace Poker
             }
         }
 
-        public void CheckSortedHand(Hand hand)
+        private void CheckSortedHand(Hand hand)
         {
             hand.OutputString = "";
             string firstValue = "";
